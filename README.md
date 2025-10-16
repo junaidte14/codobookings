@@ -19,7 +19,6 @@ It’s designed for service-based businesses, consultants, or membership sites t
 9. [Admin Management](#-admin-management)
 10. [Customization](#-customization)
 11. [Changelog](#-changelog)
-12. [Developer Notes](#-developer-notes)
 13. [License](#-license)
 
 ---
