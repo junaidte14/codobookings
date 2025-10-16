@@ -103,48 +103,17 @@ The plugin is structured to support both free and premium booking flows, powered
 
 ## 🔧 Setup & Configuration
 
-### Step 1: Define Available Slots
-Navigate to:
-Bookings → Settings
-Then add weekday slot timings in the following format:
+CodoBookings provides two main ways to configure bookings: **direct slot-based booking** or **membership-level-based booking**.  
 
-| Day | Slots |
-|-----|-------|
-| Mon | 09:00, 10:00, 11:00 |
-| Tue | 10:00, 11:00 |
-| Wed | 09:00, 10:00, 11:00, 12:00 |
+### Step 1: Enable Booking for Membership Levels
+1. Go to **Memberships → Levels** (PMPro).
+2. Create a membership level or edit an existing one.
+3. Enable booking for that level by checking the **“Enable Booking”** option in the level settings.
+4. Define slot availability per weekday for that level in **Bookings → Settings**.
 
-All times are treated as string labels and displayed exactly as entered.
-
----
-
-### Step 2: Add Booking Form to a Page
-
-Add this shortcode to any WordPress page:
-```html
-[codo_booking_form]
-This displays:
-- Calendar grid with available dates.
-- Time slots for the selected day.
-- Confirmation button linked to PMPro checkout.
-
----
-
-### Step 3: Connect to PMPro
-
-- When a user completes checkout, an associated booking post is created.
-- Bookings and orders are linked automatically using meta fields.
-- Admin can view order directly from the booking details page.
-
----
-
-## 💳 PMPro Integration
-
-- Meta `_codo_order_id` holds the PMPro order ID.
-- Booking admin table includes direct link to PMPro order.
-- Hooks available for customization:  
-  - `codo_booking_before_checkout`  
-  - `codo_booking_after_checkout`
+### Step 2: Create a Booking Page
+1. Create a new page (e.g., “Book Your Slot”).
+2. Insert the shortcode:
 
 ---
 
@@ -165,10 +134,9 @@ Located under `Dashboard → Bookings`, columns include:
 - Time
 - User
 - Status
-- Linked PMPro Order
 
 ### Status Management
-- **Pending**, **Confirmed**, **Cancelled**
+- **Pending**, **Confirmed**, **Conmpleted**, **Cancelled**
 - Cancelled bookings are excluded from slot counts and availability.
 
 ---
@@ -176,14 +144,10 @@ Located under `Dashboard → Bookings`, columns include:
 ## 🧠 Customization
 
 **Filters:**
-- `codo_booking_slots` – Modify slot list per day.
-- `codo_booking_save_meta` – Add or modify booking metadata.
-- `codo_booking_display_label` – Customize day label in calendar.
+- `codo_booking_datetime_fields_html` – Modify date and time fields.
 
 **Actions:**
-- `codo_booking_created` – Fires when a booking is created.
-- `codo_booking_cancelled` – Fires when a booking is cancelled.
-
+- N/A
 ---
 
 ## 🧾 Changelog
@@ -202,11 +166,3 @@ Released under [GPL-2.0+ License](https://www.gnu.org/licenses/gpl-2.0.html)
 © 2025 **Codoplex**
 
 ---
-
-## 🌐 References
-
-- [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/)  
-- [Paid Memberships Pro Docs](https://www.paidmembershipspro.com/documentation/)  
-- [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/)  
-- [WP_Query Meta Parameters](https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters)  
-- [PHP DateTime Manual](https://www.php.net/manual/en/book.datetime.php)
