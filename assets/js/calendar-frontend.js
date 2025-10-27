@@ -67,6 +67,7 @@
 
             // Confirm booking click
             confirmBtn.addEventListener('click', () => {
+                confirmBtn.disabled = true;
                 let email = CODOBookingsData.userEmail || ''; // logged-in user email
                 if (!email) {
                     email = prompt('Enter your email to confirm booking:');
@@ -76,6 +77,7 @@
                 const slotsToBook = Array.from(container.querySelectorAll('.codo-sidebar-item.selected')).map(item => ({
                     start: item.dataset.start,
                     end: item.dataset.end,
+                    day: item.dataset.day,
                     calendar_id: item.dataset.calendarId
                 }));
 
@@ -85,6 +87,11 @@
                 let failedCount = 0;
 
                 const bookingPromises = slotsToBook.map(slotData => {
+                    // Normalize recurrence_day
+                    let recurrence_day = '';
+                    if (type === 'weekly') {
+                        recurrence_day = slotData.day;
+                    }
                     const fd = new FormData();
                     fd.append('action', 'codobookings_create_booking');
                     fd.append('nonce', CODOBookingsData.nonce);
@@ -92,7 +99,8 @@
                     fd.append('start', slotData.start); // UTC
                     fd.append('end', slotData.end);     // UTC
                     fd.append('email', email);
-
+                    fd.append('recurrence_day', recurrence_day);
+                    //console.log(recurrence_day);return;
                     return fetch(CODOBookingsData.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: fd })
                         .then(r => r.json())
                         .then(resp => {
@@ -101,7 +109,6 @@
                         })
                         .catch(() => failedCount++);
                 });
-
                 Promise.all(bookingPromises).then(() => {
                     // Clear current sidebar content
                     container.innerHTML = '';
@@ -143,7 +150,6 @@
                 });
             });
 
-
         }
 
         const container = sidebar.querySelector('.codo-sidebar-container');
@@ -160,6 +166,7 @@
             item.className = 'codo-sidebar-item';
             item.dataset.start = slot.start;
             item.dataset.end = slot.end;
+            item.dataset.day = label;
             item.dataset.calendarId = CODOBookingsData.calendarId;
             item.dataset.slotKey = slotKey;
             item.innerHTML = `

@@ -7,7 +7,6 @@ function codobookings_dashboard() {
 
 add_action( 'admin_init', 'codobookings_register_settings' );
 function codobookings_register_settings() {
-    register_setting( 'codobookings_options', 'codobookings_default_timezone', array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => wp_timezone_string() ) );
     register_setting( 'codobookings_options', 'codobookings_default_meeting_app', array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => 'google_calendar' ) );
     register_setting( 'codobookings_options', 'codobookings_notify_before_minutes', array( 'type' => 'integer', 'sanitize_callback' => 'absint', 'default' => 30 ) );
 
@@ -41,18 +40,6 @@ function codobookings_settings_page() {
                 do_settings_sections( 'codobookings_options' );
             ?>
             <table class="form-table">
-                <tr>
-                    <th><?php _e( 'Default timezone', 'codobookings' ); ?></th>
-                    <td>
-                        <select name="codobookings_default_timezone">
-                            <?php foreach ( timezone_identifiers_list() as $tz ) : ?>
-                                <option value="<?php echo esc_attr( $tz ); ?>" <?php selected( get_option( 'codobookings_default_timezone', wp_timezone_string() ), $tz ); ?>>
-                                    <?php echo esc_html( $tz ); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                </tr>
                 <tr>
                     <th><?php _e( 'Default meeting app', 'codobookings' ); ?></th>
                     <td>

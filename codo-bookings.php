@@ -20,6 +20,7 @@ require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/menu.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/core/post-types.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/core/metaboxes.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/list-tables.php';
+require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/manage-bookings.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/settings.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/core/bookings-post-type.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/core/ajax-handlers.php';

@@ -22,8 +22,13 @@ function codobookings_calendar_settings_cb( $post ) {
     ?>
 
     <h4><?php _e( 'Weekly Availability', 'codobookings' ); ?></h4>
-    <p><button type="button" class="button" id="copy_monday"><?php _e( 'Copy Monday → All Days', 'codobookings' ); ?></button></p>
-
+    <p>
+        <button type="button" class="button" id="copy_monday"><?php _e( 'Copy Monday → All Days', 'codobookings' ); ?></button>
+        <button type="button" id="export-json" class="button"><?php _e( 'Export JSON', 'codobookings' ); ?></button>
+        <button type="button" id="import-json" class="button"><?php _e( 'Import JSON', 'codobookings' ); ?></button>
+        <input type="file" id="import-file" accept="application/json" style="display:none;">
+    </p>
+    
     <div id="weekly-slots">
         <?php foreach ( $days as $day ) : ?>
             <div class="codo-day-section" data-day="<?php echo esc_attr( $day ); ?>">
@@ -56,13 +61,6 @@ function codobookings_calendar_settings_cb( $post ) {
         </select>
     </p>
 
-    <hr>
-    <p>
-        <button type="button" id="export-json" class="button"><?php _e( 'Export JSON', 'codobookings' ); ?></button>
-        <button type="button" id="import-json" class="button"><?php _e( 'Import JSON', 'codobookings' ); ?></button>
-        <input type="file" id="import-file" accept="application/json" style="display:none;">
-    </p>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
@@ -82,8 +80,6 @@ function codobookings_calendar_settings_cb( $post ) {
                     <input type="time" name="codo_weekly_slots[${day}][${index}][start]" value="" />
                     <label>End</label>
                     <input type="time" name="codo_weekly_slots[${day}][${index}][end]" value="" />
-                    <label>Capacity</label>
-                    <input type="number" name="codo_weekly_slots[${day}][${index}][capacity]" value="1" min="1" />
                     <button type="button" class="button remove-slot">×</button>
                 `;
                 wrap.appendChild(slotDiv);
@@ -100,7 +96,7 @@ function codobookings_calendar_settings_cb( $post ) {
                 const day = daySection.dataset.day;
                 daySection.querySelectorAll('.codo-slot').forEach((slot, i) => {
                     slot.querySelectorAll('input').forEach(input => {
-                        const type = input.name.match(/\[(start|end|capacity)\]/)[1];
+                        const type = input.name.match(/\[(start|end)\]/)[1];
                         input.name = `codo_weekly_slots[${day}][${i}][${type}]`;
                     });
                 });

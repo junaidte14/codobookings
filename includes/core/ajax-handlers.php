@@ -64,11 +64,11 @@ add_action( 'wp_ajax_nopriv_codobookings_create_booking', 'codobookings_ajax_cre
 function codobookings_ajax_create_booking() {
     check_ajax_referer( 'codobookings_nonce', 'nonce' );
 
-    $params = wp_unslash( $_POST );
-    $calendar_id = absint( $params['calendar_id'] ?? 0 );
-    $start       = sanitize_text_field( $params['start'] ?? '' ); // UTC string
-    $end         = sanitize_text_field( $params['end'] ?? '' );     // UTC string
-    $email       = sanitize_email( $params['email'] ?? '' );
+    $calendar_id    = isset( $_POST['calendar_id'] ) ? absint( $_POST['calendar_id'] ) : 0;
+    $start          = isset( $_POST['start'] ) ? sanitize_text_field( wp_unslash( $_POST['start'] ) ) : '';
+    $end            = isset( $_POST['end'] ) ? sanitize_text_field( wp_unslash( $_POST['end'] ) ) : '';
+    $email          = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+    $recurrence_day = isset( $_POST['recurrence_day'] ) ? sanitize_text_field( wp_unslash( $_POST['recurrence_day'] ) ) : '';
 
     if ( ! $calendar_id || ! $start || ! $email ) {
         wp_send_json_error( 'Missing required fields (calendar, start time, or email).' );
@@ -79,7 +79,10 @@ function codobookings_ajax_create_booking() {
         wp_send_json_error( 'Invalid calendar ID.' );
     }
 
-    // Validate datetime format (UTC)
+    // Get recurrence from calendar meta
+    $recurrence = get_post_meta( $calendar_id, '_codo_recurrence', true );
+
+    // Validate datetime format
     try {
         $start_dt = new DateTimeImmutable( $start, new DateTimeZone('UTC') );
         $end_dt   = $end ? new DateTimeImmutable( $end, new DateTimeZone('UTC') ) : null;
@@ -87,19 +90,16 @@ function codobookings_ajax_create_booking() {
         wp_send_json_error( 'Invalid date/time format. Use UTC format: YYYY-MM-DD HH:MM:SS' );
     }
 
-    // Pre-booking filter hook
-    $check = apply_filters( 'codobookings_before_booking_create', true, $params );
-    if ( is_wp_error( $check ) ) wp_send_json_error( $check->get_error_message() );
-    if ( ! $check ) wp_send_json_error( 'Booking validation failed.' );
-
     $booking_data = [
-        'title'       => sprintf( 'Booking - %s', $email ),
-        'calendar_id' => $calendar_id,
-        'start'       => $start_dt->format('Y-m-d H:i:s'), // store UTC
-        'end'         => $end_dt ? $end_dt->format('Y-m-d H:i:s') : '',
-        'status'      => 'pending',
-        'email'       => $email,
-        'meta'        => [],
+        'title'          => sprintf( 'Booking - %s', $email ),
+        'calendar_id'    => $calendar_id,
+        'start'          => $start_dt->format('Y-m-d H:i:s'),
+        'end'            => $end_dt ? $end_dt->format('Y-m-d H:i:s') : '',
+        'recurrence'     => $recurrence,
+        'recurrence_day' => $recurrence_day,
+        'status'         => 'pending',
+        'email'          => $email,
+        'meta'           => [],
     ];
 
     $booking_id = codobookings_create_booking( $booking_data );
@@ -108,7 +108,7 @@ function codobookings_ajax_create_booking() {
         wp_send_json_error( $booking_id->get_error_message() );
     }
 
-    do_action( 'codobookings_after_ajax_create_booking', $booking_id, $params );
+    do_action( 'codobookings_after_ajax_create_booking', $booking_id, $_POST );
 
     wp_send_json_success( [
         'booking_id' => $booking_id,
