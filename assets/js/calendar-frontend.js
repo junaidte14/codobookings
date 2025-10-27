@@ -21,14 +21,18 @@
         return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
     }
 
-    function renderSidebar(slots, label, type) {
+    function renderSidebar(slots, label, type, root) {
         if (!Array.isArray(slots)) slots = [slots];
 
         let sidebar = document.querySelector('.codo-calendar-sidebar');
         if (!sidebar) {
             sidebar = document.createElement('div');
             sidebar.className = 'codo-calendar-sidebar';
-            document.body.appendChild(sidebar);
+            root.appendChild(sidebar);
+            // Trigger animation
+            requestAnimationFrame(() => {
+                sidebar.classList.add('visible');
+            });
 
             // Header
             const header = document.createElement('div');
@@ -63,8 +67,11 @@
 
             // Confirm booking click
             confirmBtn.addEventListener('click', () => {
-                const email = prompt('Enter your email to confirm booking:');
-                if (!email) return alert('Email is required!');
+                let email = CODOBookingsData.userEmail || ''; // logged-in user email
+                if (!email) {
+                    email = prompt('Enter your email to confirm booking:');
+                    if (!email) return; // do nothing if no email
+                }
 
                 const slotsToBook = Array.from(container.querySelectorAll('.codo-sidebar-item.selected')).map(item => ({
                     start: item.dataset.start,
@@ -72,24 +79,71 @@
                     calendar_id: item.dataset.calendarId
                 }));
 
-                if (!slotsToBook.length) return alert('No slots selected!');
+                if (!slotsToBook.length) return; // no slots selected
 
-                slotsToBook.forEach(slotData => {
+                let successCount = 0;
+                let failedCount = 0;
+
+                const bookingPromises = slotsToBook.map(slotData => {
                     const fd = new FormData();
                     fd.append('action', 'codobookings_create_booking');
                     fd.append('nonce', CODOBookingsData.nonce);
                     fd.append('calendar_id', slotData.calendar_id);
-                    fd.append('start', slotData.start);
-                    fd.append('end', slotData.end);
+                    fd.append('start', slotData.start); // UTC
+                    fd.append('end', slotData.end);     // UTC
                     fd.append('email', email);
 
-                    fetch(CODOBookingsData.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: fd })
+                    return fetch(CODOBookingsData.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: fd })
                         .then(r => r.json())
                         .then(resp => {
-                            if (!resp.success) alert('Error: ' + (resp.data || 'Unknown error'));
-                        });
+                            if (resp.success) successCount++;
+                            else failedCount++;
+                        })
+                        .catch(() => failedCount++);
+                });
+
+                Promise.all(bookingPromises).then(() => {
+                    // Clear current sidebar content
+                    container.innerHTML = '';
+                    confirmBtn.disabled = true;
+
+                    // Create message container
+                    const messageBox = document.createElement('div');
+                    messageBox.className = 'codo-booking-message';
+                    messageBox.style.padding = '15px';
+                    messageBox.style.textAlign = 'center';
+                    messageBox.style.background = '#e6f4ff';
+                    messageBox.style.border = '1px solid #0073aa';
+                    messageBox.style.borderRadius = '6px';
+
+                    const msg = [];
+                    if (successCount) msg.push(`Booking confirmed for ${successCount} slot(s)!`);
+                    if (failedCount) msg.push(`${failedCount} slot(s) could not be booked.`);
+
+                    messageBox.innerHTML = `<p>${msg.join('<br>')}</p>`;
+
+                    // Add "Book Again" button
+                    const rebookBtn = document.createElement('button');
+                    rebookBtn.textContent = 'Book Again';
+                    rebookBtn.style.marginTop = '10px';
+                    rebookBtn.style.padding = '8px 12px';
+                    rebookBtn.style.background = '#0073aa';
+                    rebookBtn.style.color = '#fff';
+                    rebookBtn.style.border = 'none';
+                    rebookBtn.style.borderRadius = '4px';
+                    rebookBtn.style.cursor = 'pointer';
+
+                    rebookBtn.addEventListener('click', () => {
+                        container.innerHTML = '';
+                        confirmBtn.disabled = true;
+                    });
+
+                    messageBox.appendChild(rebookBtn);
+                    container.appendChild(messageBox);
                 });
             });
+
+
         }
 
         const container = sidebar.querySelector('.codo-sidebar-container');
@@ -157,7 +211,7 @@
                     tooltip.className='codo-slot-tooltip';
                     tooltip.innerHTML=`Every ${day} ${slot.start}-${slot.end} (UTC)<br>${formatTimeToLocal(slot.start)}-${formatTimeToLocal(slot.end)} (Local)`;
                     btn.appendChild(tooltip);
-                    btn.addEventListener('click',()=>renderSidebar(slot,day,'weekly'));
+                    btn.addEventListener('click',()=>renderSidebar(slot,day,'weekly',root));
                     td.appendChild(btn);
                 });
             }else td.innerHTML='<span class="codo-no-slot">–</span>';
@@ -213,7 +267,7 @@
                         tooltip.innerHTML=daySlots.map(s=>`${s.start}-${s.end} UTC / ${formatTimeToLocal(s.start)}-${formatTimeToLocal(s.end)} Local`).join('<br>');
                         td.appendChild(tooltip);
 
-                        td.addEventListener('click',()=>daySlots.forEach(s=>renderSidebar(s,dateStr,'none')));
+                        td.addEventListener('click',()=>daySlots.forEach(s=>renderSidebar(s,dateStr,'none',root)));
                     }
                     dayCount++;
                 }

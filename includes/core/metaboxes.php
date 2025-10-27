@@ -17,7 +17,7 @@ function codobookings_calendar_settings_cb( $post ) {
     wp_nonce_field( 'codobookings_save_calendar', 'codobookings_calendar_nonce' );
     $days = array('monday','tuesday','wednesday','thursday','friday','saturday','sunday');
     $slots = get_post_meta( $post->ID, '_codo_weekly_slots', true ) ?: array_fill_keys($days, array());
-    var_dump($slots);
+    //var_dump($slots);
     $recurrence = get_post_meta( $post->ID, '_codo_recurrence', true ) ?: 'none';
     ?>
 

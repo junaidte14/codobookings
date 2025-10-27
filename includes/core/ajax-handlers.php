@@ -66,62 +66,42 @@ function codobookings_ajax_create_booking() {
 
     $params = wp_unslash( $_POST );
     $calendar_id = absint( $params['calendar_id'] ?? 0 );
-    $start       = sanitize_text_field( $params['start'] ?? '' );
-    $end         = sanitize_text_field( $params['end'] ?? '' );
+    $start       = sanitize_text_field( $params['start'] ?? '' ); // UTC string
+    $end         = sanitize_text_field( $params['end'] ?? '' );     // UTC string
     $email       = sanitize_email( $params['email'] ?? '' );
 
     if ( ! $calendar_id || ! $start || ! $email ) {
-        wp_send_json_error( 'Missing required fields' );
+        wp_send_json_error( 'Missing required fields (calendar, start time, or email).' );
     }
 
     $calendar_post = get_post( $calendar_id );
     if ( ! $calendar_post || $calendar_post->post_type !== 'codo_calendar' ) {
-        wp_send_json_error( 'Invalid calendar' );
+        wp_send_json_error( 'Invalid calendar ID.' );
     }
 
-    $capacity = get_post_meta( $calendar_id, '_codo_default_capacity', true );
-    $capacity = $capacity ? absint( $capacity ) : 1;
-
-    $tz = get_post_meta( $calendar_id, '_codo_timezone', true );
-    if ( ! $tz ) $tz = get_option( 'codobookings_default_timezone', wp_timezone_string() );
-
+    // Validate datetime format (UTC)
     try {
-        $start_dt = new DateTimeImmutable( $start, new DateTimeZone( $tz ) );
-        $start_utc = $start_dt->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );
-
-        $end_utc = '';
-        if ( $end ) {
-            $end_dt = new DateTimeImmutable( $end, new DateTimeZone( $tz ) );
-            $end_utc = $end_dt->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );
-        }
+        $start_dt = new DateTimeImmutable( $start, new DateTimeZone('UTC') );
+        $end_dt   = $end ? new DateTimeImmutable( $end, new DateTimeZone('UTC') ) : null;
     } catch ( Exception $e ) {
-        wp_send_json_error( 'Invalid date/time format' );
+        wp_send_json_error( 'Invalid date/time format. Use UTC format: YYYY-MM-DD HH:MM:SS' );
     }
 
-    global $wpdb;
-    $existing = $wpdb->get_col(
-        $wpdb->prepare(
-            "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_codo_start_utc' AND meta_value = %s",
-            $start_utc
-        )
-    );
-    if ( count( $existing ) >= $capacity ) {
-        wp_send_json_error( 'Slot full' );
-    }
-
+    // Pre-booking filter hook
     $check = apply_filters( 'codobookings_before_booking_create', true, $params );
     if ( is_wp_error( $check ) ) wp_send_json_error( $check->get_error_message() );
-    if ( ! $check ) wp_send_json_error( 'Booking validation failed' );
+    if ( ! $check ) wp_send_json_error( 'Booking validation failed.' );
 
     $booking_data = [
         'title'       => sprintf( 'Booking - %s', $email ),
         'calendar_id' => $calendar_id,
-        'start'       => $start_utc,
-        'end'         => $end_utc,
+        'start'       => $start_dt->format('Y-m-d H:i:s'), // store UTC
+        'end'         => $end_dt ? $end_dt->format('Y-m-d H:i:s') : '',
         'status'      => 'pending',
         'email'       => $email,
         'meta'        => [],
     ];
+
     $booking_id = codobookings_create_booking( $booking_data );
 
     if ( is_wp_error( $booking_id ) ) {
@@ -130,5 +110,8 @@ function codobookings_ajax_create_booking() {
 
     do_action( 'codobookings_after_ajax_create_booking', $booking_id, $params );
 
-    wp_send_json_success( [ 'booking_id' => $booking_id ] );
+    wp_send_json_success( [
+        'booking_id' => $booking_id,
+        'message'    => 'Booking confirmed successfully!'
+    ] );
 }

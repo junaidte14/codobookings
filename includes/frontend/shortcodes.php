@@ -23,6 +23,7 @@ function codobookings_calendar_shortcode( $atts ) {
         'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
         'nonce'      => wp_create_nonce( 'codobookings_nonce' ),
         'calendarId' => $calendar_id,
+        'userEmail'  => is_user_logged_in() ? wp_get_current_user()->user_email : '',
         'i18n'       => array(
             'loading' => __( 'Loading booking calendar...', 'codobookings' ),
             'failed'  => __( 'Failed to load calendar. Please refresh the page.', 'codobookings' ),
