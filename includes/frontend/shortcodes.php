@@ -31,11 +31,25 @@ function codobookings_calendar_shortcode( $atts ) {
         'codobookings-calendar-onetime'
     ), CODOBOOKINGS_VERSION, true );
 
+    // Get sidebar settings
+    $settings = get_post_meta( $calendar_id, '_codo_sidebar_settings', true );
+    $settings = wp_parse_args( $settings, array(
+        'show_title'       => 'yes',
+        'show_description' => 'yes',
+        'allow_guest'      => 'no',
+    ));
+
+    //var_dump($settings);
+
+    $current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $login_url   = wp_login_url( $current_url );
+
+    $confirmation_message = get_post_meta( $calendar_id, '_codo_confirmation_message', true ) ?: __( 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.', 'codobookings' );
+
     wp_localize_script( 'codobookings-main', 'CODOBookingsData', array(
         'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
         'nonce'      => wp_create_nonce( 'codobookings_nonce' ),
         'calendarId' => $calendar_id,
-        'userEmail'  => is_user_logged_in() ? wp_get_current_user()->user_email : '',
         'i18n'       => array(
             'loading' => __( 'Loading booking calendar...', 'codobookings' ),
             'failed'  => __( 'Failed to load calendar. Please refresh the page.', 'codobookings' ),
@@ -44,10 +58,33 @@ function codobookings_calendar_shortcode( $atts ) {
         )
     ));
 
+    wp_add_inline_script( 'codobookings-main', sprintf(
+        'window.codobookings_settings_%d = %s;',
+        $calendar_id,
+        wp_json_encode([
+            'settings'  => $settings,
+            'confirmation_message' => $confirmation_message,
+            'userEmail' => is_user_logged_in() ? wp_get_current_user()->user_email : '',
+            'loginUrl'  => $login_url,
+        ])
+    ) );
+
     ob_start();
     $unique_id = 'codo-calendar-' . $calendar_id . '-' . uniqid();
     ?>
     <div class="codo-calendar-container">
+        <?php if ( $settings['show_title'] === 'yes' ) : ?>
+            <h2 class="codo-calendar-title" style="margin-bottom:0.5em;">
+                <?php echo esc_html( get_the_title( $calendar_id ) ); ?>
+            </h2>
+        <?php endif; ?>
+
+        <?php if ( $settings['show_description'] === 'yes' ) : ?>
+            <p class="codo-calendar-description" style="margin-bottom:1em; font-size:0.95em; color:#555;">
+                <?php echo esc_html( get_post_field('post_content', $calendar_id) ); ?>
+            </p>
+        <?php endif; ?>
+
         <div id="<?php echo esc_attr($unique_id); ?>" 
              class="codo-calendar-wrapper" 
              data-calendar-id="<?php echo esc_attr($calendar_id); ?>">

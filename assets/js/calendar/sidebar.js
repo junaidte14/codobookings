@@ -5,6 +5,51 @@ window.CodoBookings = window.CodoBookings || {};
     const { formatTimeToLocal } = ns.utils;
     const { api } = ns;
 
+    function showConfirmationMessage(containerEl, root) {
+        const calendarSettings = window['codobookings_settings_' + root.dataset.calendarId];
+        const msg = calendarSettings?.confirmation_message || 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.';
+        const overlay = document.createElement('div');
+        overlay.className = 'codo-confirm-overlay';
+        overlay.style = `
+            position:fixed; top:0; left:0; right:0; bottom:0;
+            background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;
+        `;
+        const box = document.createElement('div');
+        box.style = `
+            background:#fff; padding:20px 30px; border-radius:10px;
+            max-width:400px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        `;
+        box.innerHTML = `
+            <p style="font-size:16px;">${msg}</p>
+            <a id="closeConfirmMsg" style="margin-top:15px; padding:8px 16px; background:#0073aa; color:#fff; border:none; border-radius:5px; cursor: pointer;">OK</a>
+        `;
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        // Disable further interaction until closed
+        document.body.style.pointerEvents = 'none';
+        box.style.pointerEvents = 'auto';
+
+        document.getElementById('closeConfirmMsg').addEventListener('click', () => {
+            overlay.remove();
+            document.body.style.pointerEvents = 'auto';
+            reloadCalendar(containerEl);
+        });
+    }
+
+    function reloadCalendar(containerEl){
+        // ✅ Reload the calendar after booking
+        const calendarRoot = containerEl.closest('.codo-calendar-wrapper');
+        if (calendarRoot && calendarRoot.dataset.calendarId) {
+            ns.api.fetchCalendar(calendarRoot.dataset.calendarId)
+                .then(data => {
+                    if (data.recurrence === 'weekly') ns.renderWeeklyCalendar(calendarRoot, data);
+                    else ns.renderOneTimeCalendar(calendarRoot, data);
+                })
+                .catch(err => console.error('Failed to reload calendar:', err));
+        }
+    }
+
     function renderSidebar(slots, label, type, root){
         if (!Array.isArray(slots)) slots = [slots];
 
@@ -47,13 +92,31 @@ window.CodoBookings = window.CodoBookings || {};
 
             confirmBtn.addEventListener('click', () => {
                 confirmBtn.disabled = true;
-                let email = window.CODOBookingsData && CODOBookingsData.userEmail || '';
-                if (!email){
+                // Check guest booking
+                const containerEl = sidebar.querySelector('.codo-sidebar-container');
+                // dynamically use the per-calendar settings
+                const calendarSettings = window['codobookings_settings_' + root.dataset.calendarId];
+                //console.log(calendarSettings);
+                const allowGuest = calendarSettings?.settings?.allow_guest === 'yes';
+                const userEmail  = calendarSettings?.userEmail || '';
+                const loginUrl   = calendarSettings?.loginUrl || '#';
+
+                if (!allowGuest && !userEmail) {
+                    containerEl.innerHTML = `
+                        <div class="codo-booking-message" style="padding:15px; text-align:center; background:#ffe6e6; border:1px solid #cc0000; border-radius:6px;">
+                            <p>You must be logged in to book this calendar.</p>
+                            <a href="${loginUrl}" style="display:inline-block; margin-top:10px; padding:8px 12px; background:#cc0000; color:#fff; border-radius:4px;">Login & Continue</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Guest booking allowed or user logged in
+                let email = userEmail;
+                if (!email) {
                     email = prompt('Enter your email to confirm booking:');
                     if (!email) return;
                 }
-
-                const containerEl = sidebar.querySelector('.codo-sidebar-container');
                 const selectedItems = Array.from(containerEl.querySelectorAll('.codo-sidebar-item.selected'));
 
                 const slotsToBook = selectedItems.map(item => {
@@ -93,60 +156,7 @@ window.CodoBookings = window.CodoBookings || {};
                 Promise.all(promises).then(() => {
                     containerEl.innerHTML = '';
                     confirmBtn.disabled = true;
-
-                    const messageBox = document.createElement('div');
-                    messageBox.className = 'codo-booking-message';
-                    messageBox.style.padding = '15px';
-                    messageBox.style.textAlign = 'center';
-                    messageBox.style.background = '#e6f4ff';
-                    messageBox.style.border = '1px solid #0073aa';
-                    messageBox.style.borderRadius = '6px';
-
-                    const msg = [];
-                    if (successCount) msg.push(`Booking confirmed for ${successCount} slot(s)!`);
-                    if (failedCount) msg.push(`${failedCount} slot(s) could not be booked.`);
-
-                    messageBox.innerHTML = `<p>${msg.join('<br>')}</p>`;
-
-                    const rebookBtn = document.createElement('button');
-                    rebookBtn.textContent = 'Book Again';
-                    rebookBtn.style.marginTop = '10px';
-                    rebookBtn.style.padding = '8px 12px';
-                    rebookBtn.style.background = '#0073aa';
-                    rebookBtn.style.color = '#fff';
-                    rebookBtn.style.border = 'none';
-                    rebookBtn.style.borderRadius = '4px';
-                    rebookBtn.style.cursor = 'pointer';
-
-                    rebookBtn.addEventListener('click', () => {
-                        containerEl.innerHTML = '';
-                        confirmBtn.disabled = true;
-
-                        // ✅ Reload the calendar after booking
-                        const calendarRoot = containerEl.closest('.codo-calendar-wrapper');
-                        if (calendarRoot && calendarRoot.dataset.calendarId) {
-                            ns.api.fetchCalendar(calendarRoot.dataset.calendarId)
-                                .then(data => {
-                                    if (data.recurrence === 'weekly') ns.renderWeeklyCalendar(calendarRoot, data);
-                                    else ns.renderOneTimeCalendar(calendarRoot, data);
-                                })
-                                .catch(err => console.error('Failed to reload calendar:', err));
-                        }
-                    });
-
-                    messageBox.appendChild(rebookBtn);
-                    containerEl.appendChild(messageBox);
-
-                    // ✅ Reload the calendar after booking
-                    const calendarRoot = containerEl.closest('.codo-calendar-wrapper');
-                    if (calendarRoot && calendarRoot.dataset.calendarId) {
-                        ns.api.fetchCalendar(calendarRoot.dataset.calendarId)
-                            .then(data => {
-                                if (data.recurrence === 'weekly') ns.renderWeeklyCalendar(calendarRoot, data);
-                                else ns.renderOneTimeCalendar(calendarRoot, data);
-                            })
-                            .catch(err => console.error('Failed to reload calendar:', err));
-                    }
+                    showConfirmationMessage(containerEl, root);
                 });
             });
         }

@@ -39,7 +39,7 @@ window.CodoBookings = window.CodoBookings || {};
      * Render One-Time Calendar (monthly view)
      */
     function renderOneTimeCalendar(root, data, monthOffset = 0) {
-        console.log('Calendar data:', data);
+        //console.log('Calendar data:', data);
         const now = new Date();
         const today = new Date();
         today.setHours(0, 0, 0, 0);

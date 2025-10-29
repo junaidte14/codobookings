@@ -8,7 +8,7 @@ window.CodoBookings = window.CodoBookings || {};
      * Render Weekly Calendar (booked slots already filtered by backend)
      */
     function renderWeeklyCalendar(root, data) {
-        console.log('Calendar data:', data);
+        //console.log('Calendar data:', data);
         const allSlots = data.slots || []; // Slots returned from backend
         const fullDays = daysOfWeek();     // ['monday','tuesday',...]
         const shortDays = fullDays.map(d => d.slice(0,3)); // ['Mon','Tue',...]

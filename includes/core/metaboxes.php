@@ -60,6 +60,10 @@ function codobookings_calendar_settings_cb( $post ) {
             <option value="weekly" <?php selected( $recurrence, 'weekly' ); ?>><?php _e( 'Weekly', 'codobookings' ); ?></option>
         </select>
     </p>
+    <?php 
+    // Allow extensions to add more fields
+    do_action( 'codobookings_calendar_settings_after', $post );
+    ?>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -217,6 +221,126 @@ function codobookings_save_calendar_meta( $post_id, $post ) {
 
     update_post_meta( $post_id, '_codo_weekly_slots', $slots );
     update_post_meta( $post_id, '_codo_recurrence', sanitize_text_field( $_POST['codo_recurrence'] ?? 'none' ) );
+
+    if ( isset( $_POST['codo_confirmation_message'] ) ) {
+        update_post_meta(
+            $post_id,
+            '_codo_confirmation_message',
+            sanitize_textarea_field( $_POST['codo_confirmation_message'] )
+        );
+    }
     
     do_action( 'codobookings_calendar_saved', $post_id );
+}
+
+add_action( 'codobookings_calendar_settings_after', 'codobookings_add_confirmation_message_field' );
+function codobookings_add_confirmation_message_field( $post ) {
+    $message = get_post_meta( $post->ID, '_codo_confirmation_message', true );
+    if ( empty( $message ) ) {
+        $message = __( 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.', 'codobookings' );
+    }
+    ?>
+    <hr>
+    <h4><?php _e( 'Confirmation Message', 'codobookings' ); ?></h4>
+    <p>
+        <textarea name="codo_confirmation_message" rows="3" style="width:100%;"><?php echo esc_textarea( $message ); ?></textarea>
+        <small><?php _e( 'This message will be shown to the user after they confirm their booking.', 'codobookings' ); ?></small>
+    </p>
+    <?php
+}
+
+
+/**
+ * Add Sidebar Meta Box for Calendar Settings
+ */
+add_action( 'add_meta_boxes', 'codobookings_add_sidebar_settings_meta' );
+function codobookings_add_sidebar_settings_meta() {
+    add_meta_box(
+        'codo_calendar_sidebar_settings',
+        __( 'Calendar Settings', 'codobookings' ),
+        'codobookings_sidebar_settings_cb',
+        'codo_calendar',
+        'side',
+        'default'
+    );
+}
+
+/**
+ * Render Sidebar Settings Meta Box
+ */
+function codobookings_sidebar_settings_cb( $post ) {
+    wp_nonce_field( 'codobookings_save_sidebar_settings', 'codobookings_sidebar_nonce' );
+
+    // Default settings
+    $settings = wp_parse_args(
+        get_post_meta( $post->ID, '_codo_sidebar_settings', true ),
+        array(
+            'show_title'        => 'yes',
+            'show_description'  => 'yes',
+            'allow_guest'       => 'no',
+        )
+    );
+
+    // Allow other developers to add extra settings fields
+    $extra_fields = apply_filters( 'codobookings_sidebar_settings_fields', array() );
+    ?>
+
+    <p>
+        <label>
+            <input type="checkbox" name="codo_sidebar_settings[show_title]" value="yes" <?php checked( $settings['show_title'], 'yes' ); ?> />
+            <?php _e( 'Show Title', 'codobookings' ); ?>
+        </label>
+        <p class="description"><?php _e( 'Toggle to display the calendar title on the frontend.', 'codobookings' ); ?></p>
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" name="codo_sidebar_settings[show_description]" value="yes" <?php checked( $settings['show_description'], 'yes' ); ?> />
+            <?php _e( 'Show Description', 'codobookings' ); ?>
+        </label>
+        <p class="description"><?php _e( 'Toggle to display the calendar description on the frontend.', 'codobookings' ); ?></p>
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" name="codo_sidebar_settings[allow_guest]" value="yes" <?php checked( $settings['allow_guest'], 'yes' ); ?> />
+            <?php _e( 'Allow Guest Bookings', 'codobookings' ); ?>
+        </label>
+        <p class="description"><?php _e( 'Allow users who are not logged in to make bookings with only providing their email address.', 'codobookings' ); ?></p>
+    </p>
+
+    <?php
+    // Output extra fields added via hooks
+    if( ! empty( $extra_fields ) && is_array( $extra_fields ) ) {
+        foreach( $extra_fields as $field ) {
+            echo '<p>' . $field . '</p>';
+        }
+    }
+}
+
+/**
+ * Save Sidebar Settings
+ */
+add_action( 'save_post', 'codobookings_save_sidebar_settings', 20, 2 );
+function codobookings_save_sidebar_settings( $post_id, $post ) {
+    if ( $post->post_type !== 'codo_calendar' ) return;
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    if ( ! isset( $_POST['codobookings_sidebar_nonce'] ) || ! wp_verify_nonce( $_POST['codobookings_sidebar_nonce'], 'codobookings_save_sidebar_settings' ) ) return;
+    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
+    $settings = $_POST['codo_sidebar_settings'] ?? array();
+    
+    // Sanitize each known setting
+    $sanitized = array(
+        'show_title'       => isset( $settings['show_title'] ) && $settings['show_title'] === 'yes' ? 'yes' : 'no',
+        'show_description' => isset( $settings['show_description'] ) && $settings['show_description'] === 'yes' ? 'yes' : 'no',
+        'allow_guest'      => isset( $settings['allow_guest'] ) && $settings['allow_guest'] === 'yes' ? 'yes' : 'no',
+    );
+
+    /**
+     * Allow developers to sanitize/modify settings before saving
+     */
+    $sanitized = apply_filters( 'codobookings_sidebar_settings_sanitize', $sanitized, $post_id );
+
+    update_post_meta( $post_id, '_codo_sidebar_settings', $sanitized );
 }
