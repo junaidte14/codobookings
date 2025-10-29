@@ -42,29 +42,38 @@ function codobookings_dashboard() {
                     <h2><?php esc_html_e( 'System Overview', 'codobookings' ); ?></h2>
                     <table class="widefat striped">
                         <tbody>
+                        <?php
+                        // Default system overview rows
+                        $overview_rows = [
+                            'active_calendars' => [
+                                'label' => __( 'Active Calendars', 'codobookings' ),
+                                'value' => intval( codobookings_count_items( 'calendars' ) ),
+                            ],
+                            'total_bookings' => [
+                                'label' => __( 'Total Bookings', 'codobookings' ),
+                                'value' => intval( codobookings_count_items( 'bookings' ) ),
+                            ],
+                            'upcoming_bookings' => [
+                                'label' => __( 'Upcoming Bookings (one-time)', 'codobookings' ),
+                                'value' => intval( codobookings_count_upcoming_bookings() ),
+                            ],
+                            
+                        ];
+
+                        /**
+                         * Allow other extensions to add or modify system overview rows.
+                         * Each item must return ['label' => '...', 'value' => '...'].
+                         */
+                        $overview_rows = apply_filters( 'codobookings_system_overview_rows', $overview_rows );
+
+                        foreach ( $overview_rows as $key => $row ) :
+                            ?>
                             <tr>
-                                <th><?php esc_html_e( 'Active Calendars', 'codobookings' ); ?></th>
-                                <td><?php echo intval( codobookings_count_items( 'calendars' ) ); ?></td>
+                                <th><?php echo esc_html( $row['label'] ); ?></th>
+                                <td><?php echo wp_kses_post( $row['value'] ); ?></td>
                             </tr>
-                            <tr>
-                                <th><?php esc_html_e( 'Total Bookings', 'codobookings' ); ?></th>
-                                <td><?php echo intval( codobookings_count_items( 'bookings' ) ); ?></td>
-                            </tr>
-                            <!-- <tr>
-                                <th><?php esc_html_e( 'Upcoming Bookings', 'codobookings' ); ?></th>
-                                <td><?php echo intval( codobookings_count_upcoming_bookings() ); ?></td>
-                            </tr> -->
-                            <tr>
-                                <th><?php esc_html_e( 'Google Calendar Linked', 'codobookings' ); ?></th>
-                                <td>
-                                    <?php if ( get_option( 'codobookings_google_refresh_token' ) ) : ?>
-                                        <span style="color:green;"><?php esc_html_e( 'Connected', 'codobookings' ); ?></span>
-                                    <?php else : ?>
-                                        <span style="color:#a00;"><?php esc_html_e( 'Not Connected', 'codobookings' ); ?></span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <?php endforeach; ?>
+                    </tbody>
                     </table>
                 </div>
 
@@ -204,22 +213,28 @@ function codobookings_count_items( $type ) {
  * @return int Number of upcoming bookings.
  */
 function codobookings_count_upcoming_bookings() {
+    global $wpdb;
+
     $today = current_time( 'mysql' );
 
-    $query = new WP_Query( array(
-        'post_type'      => 'codo_booking',
-        'post_status'    => 'publish',
-        'meta_query'     => array(
-            array(
-                'key'     => '_codo_start',
-                'value'   => $today,
-                'compare' => '>=',
-                'type'    => 'DATETIME',
-            ),
-        ),
-        'fields'         => 'ids',
-        'no_found_rows'  => true,
+    // Count all bookings where start >= now AND status != cancelled
+    $count = $wpdb->get_var( $wpdb->prepare(
+        "
+        SELECT COUNT(pm.post_id)
+        FROM {$wpdb->postmeta} pm
+        INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+        INNER JOIN {$wpdb->postmeta} ps ON ps.post_id = p.ID AND ps.meta_key = '_codo_status'
+        WHERE pm.meta_key = %s
+          AND p.post_type = 'codo_booking'
+          AND p.post_status = 'publish'
+          AND STR_TO_DATE(REPLACE(pm.meta_value, 'T', ' '), '%%Y-%%m-%%d %%H:%%i:%%s') >= %s
+          AND ps.meta_value != %s
+        ",
+        '_codo_start',
+        $today,
+        'cancelled'
     ) );
 
-    return (int) $query->found_posts;
+    return (int) $count;
 }
+
