@@ -1,9 +1,6 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/**
- * AJAX: Fetch Calendar Data
- */
 add_action('wp_ajax_codo_get_calendar', 'codo_get_calendar');
 add_action('wp_ajax_nopriv_codo_get_calendar', 'codo_get_calendar');
 
@@ -23,8 +20,10 @@ function codo_get_calendar() {
     if (!is_array($slots_meta)) $slots_meta = [];
 
     $slots = [];
+    $bookings_list = [];
+    $site_tz = wp_timezone();
 
-    // --- Fetch all bookings for this calendar ---
+    // --- Fetch all bookings ---
     $booking_query = new WP_Query([
         'post_type'      => 'codo_booking',
         'post_status'    => 'any',
@@ -45,6 +44,31 @@ function codo_get_calendar() {
         'fields' => 'ids',
     ]);
 
+    foreach ($booking_query->posts as $booking_id) {
+        $start_raw = get_post_meta($booking_id, '_codo_start', true);
+        $end_raw   = get_post_meta($booking_id, '_codo_end', true);
+        $day_meta  = strtolower(trim(get_post_meta($booking_id, '_codo_day', true)));
+        $type   = get_post_meta($booking_id, '_codo_recurrence', true);
+
+        if (!$start_raw || !$end_raw || !$day_meta) continue;
+
+        $is_datetime = preg_match('/\d{4}-\d{2}-\d{2}/', $start_raw); // detect one-time
+
+        try {
+            $start_utc = new DateTime($start_raw, new DateTimeZone('UTC'));
+            $end_utc   = new DateTime($end_raw, new DateTimeZone('UTC'));
+        } catch (Exception $e) {
+            continue;
+        }
+
+        $bookings_list[] = [
+            'type'    => $type,
+            'weekday' => $day_meta,
+            'start'   => $start_utc->format('Y-m-d H:i:s'),
+            'end'     => $end_utc->format('Y-m-d H:i:s'),
+        ];
+    }
+
     $bookings = [];
     foreach ($booking_query->posts as $booking_id) {
         $start = get_post_meta($booking_id, '_codo_start', true);
@@ -60,10 +84,8 @@ function codo_get_calendar() {
         }
     }
 
-    // --- Filter slots ---
     foreach ($slots_meta as $day_name => $day_slots) {
         if (!is_array($day_slots)) continue;
-
         $day_lower = strtolower($day_name);
 
         foreach ($day_slots as $slot) {
@@ -86,51 +108,15 @@ function codo_get_calendar() {
                         break;
                     }
 
-                } else {
-                    // --- One-time booking ---
-                    $site_timezone = wp_timezone(); // WordPress site timezone
-                    // Get booking day (e.g., "wednesday")
-                    $booking_day_lower = strtolower(trim($booking['day']));
-
-                    // Skip if not same weekday
-                    if ($booking_day_lower !== $day_lower) {
-                        continue;
-                    }
-
-                    // Convert booking times from UTC to local site timezone
-                    $booking_start_dt = new DateTime($booking['start']->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
-                    $booking_start_dt->setTimezone($site_timezone);
-
-                    $booking_end_dt = new DateTime($booking['end']->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
-                    $booking_end_dt->setTimezone($site_timezone);
-
-                    // Build slot datetime using booking *local* date + slot times
-                    $booking_date = $booking_start_dt->format('Y-m-d');
-                    $slot_start_dt = new DateTime("$booking_date {$slot['start']}", new DateTimeZone('UTC'));
-                    $slot_start_dt->setTimezone($site_timezone);
-
-                    $slot_end_dt = new DateTime("$booking_date {$slot['end']}", new DateTimeZone('UTC'));
-                    $slot_end_dt->setTimezone($site_timezone);
-
-                    // Match if start and end match exactly
-                    if (
-                        $slot_start_dt->format('Y-m-d H:i') === $booking_start_dt->format('Y-m-d H:i') &&
-                        $slot_end_dt->format('Y-m-d H:i') === $booking_end_dt->format('Y-m-d H:i')
-                    ) {
-                        $slot_available = false;
-                        break;
-                    }
-
-
                 }
             }
 
             if (!$slot_available) continue;
-
+            
             $slots[] = [
-                'day'   => $day_lower,
-                'start' => sanitize_text_field($slot['start']),
-                'end'   => sanitize_text_field($slot['end']),
+                'day'    => $day_lower,
+                'start'  => sanitize_text_field($slot['start']),
+                'end'    => sanitize_text_field($slot['end']),
             ];
         }
     }
@@ -139,10 +125,10 @@ function codo_get_calendar() {
         'id'         => $calendar_id,
         'title'      => $calendar_post->post_title,
         'recurrence' => $recurrence,
-        'slots'      => $slots,
+        'slots'      => $slots,         // available slots
+        'bookings'   => $bookings_list, // Concrete booked instances
     ]);
 }
-
 
 /**
  * AJAX: Create Booking
