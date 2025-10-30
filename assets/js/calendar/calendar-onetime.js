@@ -48,9 +48,33 @@ window.CodoBookings = window.CodoBookings || {};
         const year = current.getFullYear();
         const month = current.getMonth();
 
+        // Calculate days in this month
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Check if this month has any available slots
+        let hasAvailableSlots = false;
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${('0' + (month + 1)).slice(-2)}-${('0' + day).slice(-2)}`;
+            const cellDate = new Date(year, month, day);
+            cellDate.setHours(0, 0, 0, 0);
+
+            if (cellDate >= today) {
+                const daySlots = getSlotsForDate(dateStr, data);
+                if (daySlots.length > 0) {
+                    hasAvailableSlots = true;
+                    break;
+                }
+            }
+        }
+
+        // If no slots, move to next month (limit to 12 months ahead)
+        if (!hasAvailableSlots && monthOffset < 12) {
+            return renderOneTimeCalendar(root, data, monthOffset + 1);
+        }
+
         // Monday = first day
         const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        //const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         // --- Header ---
         const header = document.createElement('div');
@@ -121,6 +145,11 @@ window.CodoBookings = window.CodoBookings || {};
                         td.appendChild(tooltip);
 
                         td.addEventListener('click', () => {
+                            // Remove 'codo-active' from any previously active slot in this calendar
+                            const activeEls = root.querySelectorAll('.codo-active');
+                            activeEls.forEach(el => el.classList.remove('codo-active'));
+                            // Add 'codo-active' to this cell
+                            td.classList.add('codo-active');
                             daySlots.forEach(slot => renderSidebar(slot, dateStr, 'none', root));
                         });
                     } else {
