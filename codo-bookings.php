@@ -34,7 +34,8 @@ require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/settings/emails.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/dashboard.php';
 
 // Shortcodes
-require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/frontend/shortcodes.php';
+require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/shortcodes/single-calendar.php';
+require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/shortcodes/calendars-grid.php';
 
 // Emails
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/emails/basic-emails.php';

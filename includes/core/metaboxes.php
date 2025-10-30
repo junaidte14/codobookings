@@ -53,13 +53,37 @@ function codobookings_calendar_settings_cb( $post ) {
 
     <hr>
 
-    <h4><?php _e( 'Recurrence Rule', 'codobookings' ); ?></h4>
+    <h4><?php _e( 'Calendar Type', 'codobookings' ); ?></h4>
     <p>
+        <?php
+        // Default recurrence types
+        $recurrence_types = array(
+            'none'   => __( 'One-time Booking', 'codobookings' ),
+            'weekly' => __( 'Weekly (Booking Repeats Every Week)', 'codobookings' ),
+        );
+
+        /**
+         * Filter: codobookings_recurrence_types
+         * 
+         * Allows extensions to register new calendar recurrence types.
+         * 
+         * Example:
+         * add_filter('codobookings_recurrence_types', function($types){
+         *     $types['monthly'] = __('Monthly', 'myaddon');
+         *     return $types;
+         * });
+         */
+        $recurrence_types = apply_filters( 'codobookings_recurrence_types', $recurrence_types );
+        ?>
         <select name="codo_recurrence" id="codo_recurrence">
-            <option value="none" <?php selected( $recurrence, 'none' ); ?>><?php _e( 'None (One-time booking)', 'codobookings' ); ?></option>
-            <option value="weekly" <?php selected( $recurrence, 'weekly' ); ?>><?php _e( 'Weekly', 'codobookings' ); ?></option>
+            <?php foreach ( $recurrence_types as $key => $label ) : ?>
+                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $recurrence, $key ); ?>>
+                    <?php echo esc_html( $label ); ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </p>
+
     <?php 
     // Allow extensions to add more fields
     do_action( 'codobookings_calendar_settings_after', $post );
