@@ -135,13 +135,10 @@ window.CodoBookings = window.CodoBookings || {};
 
                         const tooltip = document.createElement('div');
                         tooltip.className = 'codo-calendar-tooltip';
-                        tooltip.innerHTML = daySlots
-                            .map(s => {
-                                const utc = `${s.start}-${s.end} UTC`;
-                                const local = `${formatTimeToLocal(s.start)}-${formatTimeToLocal(s.end)} Local`;
-                                return `${utc} / ${local}`;
-                            })
-                            .join('<br>');
+                        const slotCount = daySlots.length;
+                        tooltip.textContent = slotCount === 1 
+                            ? '1 Slot Available' 
+                            : `${slotCount} Slots Available`;
                         td.appendChild(tooltip);
 
                         td.addEventListener('click', () => {

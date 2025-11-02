@@ -23,6 +23,7 @@ function codobookings_calendar_settings_cb( $post ) {
 
     <h4><?php _e( 'Weekly Availability', 'codobookings' ); ?></h4>
     <p>
+        <button type="button" class="button" id="fill_standard_hours"><?php _e( 'Fill Standard 9–5 (Mon–Fri)', 'codobookings' ); ?></button>
         <button type="button" class="button" id="copy_monday"><?php _e( 'Copy Monday → All Days', 'codobookings' ); ?></button>
         <button type="button" id="export-json" class="button"><?php _e( 'Export JSON', 'codobookings' ); ?></button>
         <button type="button" id="import-json" class="button"><?php _e( 'Import JSON', 'codobookings' ); ?></button>
@@ -54,35 +55,95 @@ function codobookings_calendar_settings_cb( $post ) {
     <hr>
 
     <h4><?php _e( 'Calendar Type', 'codobookings' ); ?></h4>
-    <p>
-        <?php
-        // Default recurrence types
-        $recurrence_types = array(
-            'none'   => __( 'One-time Booking', 'codobookings' ),
-            'weekly' => __( 'Weekly (Booking Repeats Every Week)', 'codobookings' ),
-        );
 
-        /**
-         * Filter: codobookings_recurrence_types
-         * 
-         * Allows extensions to register new calendar recurrence types.
-         * 
-         * Example:
-         * add_filter('codobookings_recurrence_types', function($types){
-         *     $types['monthly'] = __('Monthly', 'myaddon');
-         *     return $types;
-         * });
-         */
-        $recurrence_types = apply_filters( 'codobookings_recurrence_types', $recurrence_types );
+    <?php
+    // Default recurrence types with descriptions
+    $recurrence_types = array(
+        'none' => array(
+            'label'       => __( 'One-time Booking', 'codobookings' ),
+            'description' => __( 'A single event that occurs only once.', 'codobookings' ),
+        ),
+        'weekly' => array(
+            'label'       => __( 'Weekly', 'codobookings' ),
+            'description' => __( 'Repeats every week on the same day.', 'codobookings' ),
+        ),
+    );
+
+    // Allow extensions to add more recurrence types
+    $recurrence_types = apply_filters( 'codobookings_recurrence_types', $recurrence_types );
+    ?>
+
+    <div class="codo-recurrence-options">
+        <?php foreach ( $recurrence_types as $key => $data ) : 
+            $is_active = ( $recurrence === $key ) ? 'active' : '';
         ?>
-        <select name="codo_recurrence" id="codo_recurrence">
-            <?php foreach ( $recurrence_types as $key => $label ) : ?>
-                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $recurrence, $key ); ?>>
-                    <?php echo esc_html( $label ); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </p>
+            <div class="codo-recurrence-box <?php echo esc_attr( $is_active ); ?>" data-value="<?php echo esc_attr( $key ); ?>">
+                <strong><?php echo esc_html( $data['label'] ); ?></strong>
+                <p><?php echo esc_html( $data['description'] ); ?></p>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- Hidden input for saving selected value -->
+    <input type="hidden" name="codo_recurrence" id="codo_recurrence" value="<?php echo esc_attr( $recurrence ); ?>" />
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const boxes = document.querySelectorAll('.codo-recurrence-box');
+        const hiddenInput = document.getElementById('codo_recurrence');
+
+        boxes.forEach(box => {
+            box.addEventListener('click', () => {
+                boxes.forEach(b => b.classList.remove('active'));
+                box.classList.add('active');
+                hiddenInput.value = box.dataset.value;
+            });
+        });
+    });
+    </script>
+
+    <style>
+    .codo-recurrence-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .codo-recurrence-box {
+        flex: 1 1 45%;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 12px 14px;
+        cursor: pointer;
+        background: #f9f9f9;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .codo-recurrence-box:hover {
+        border-color: #2271b1;
+        background: #f0f8ff;
+    }
+
+    .codo-recurrence-box.active {
+        border-color: #2271b1;
+        background: #e6f2ff;
+        box-shadow: 0 0 4px rgba(34, 113, 177, 0.4);
+    }
+
+    .codo-recurrence-box strong {
+        display: block;
+        font-size: 14px;
+        color: #1d2327;
+        margin-bottom: 4px;
+    }
+
+    .codo-recurrence-box p {
+        margin: 0;
+        font-size: 12px;
+        color: #555;
+    }
+    </style>
+
 
     <?php 
     // Allow extensions to add more fields
@@ -131,6 +192,42 @@ function codobookings_calendar_settings_cb( $post ) {
             }
         });
 
+        // Fill standard 9–5 slots for weekdays (Mon–Fri)
+        document.getElementById('fill_standard_hours').addEventListener('click', function() {
+
+            // with half-hour breaks, example:
+            const standardSlots = [
+                { start: '09:00', end: '10:00' },
+                { start: '10:00', end: '11:00' },
+                { start: '11:00', end: '12:00' },
+                { start: '13:00', end: '14:00' },
+                { start: '14:00', end: '15:00' },
+                { start: '15:00', end: '16:00' },
+                { start: '16:00', end: '17:00' },
+            ];
+
+            const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            weekdays.forEach(day => {
+                const wrap = document.querySelector(`[data-day="${day}"] .codo-slots-wrap`);
+                if (!wrap) return;
+
+                wrap.innerHTML = ''; // clear previous slots
+                standardSlots.forEach((slot, i) => {
+                    const newSlot = document.createElement('div');
+                    newSlot.classList.add('codo-slot');
+                    newSlot.innerHTML = `
+                        <label>Start</label>
+                        <input type="time" name="codo_weekly_slots[${day}][${i}][start]" value="${slot.start}" />
+                        <label>End</label>
+                        <input type="time" name="codo_weekly_slots[${day}][${i}][end]" value="${slot.end}" />
+                        <button type="button" class="button remove-slot">×</button>
+                    `;
+                    wrap.appendChild(newSlot);
+                });
+            });
+
+            alert('Standard 9–5 slots added for Monday to Friday.');
+        });
         // Copy Monday → All Days
         document.getElementById('copy_monday').addEventListener('click', function(){
             const mondaySlots = document.querySelectorAll('[data-day="monday"] .codo-slot');
