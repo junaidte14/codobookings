@@ -82,16 +82,12 @@ Once activated:
 
 ## 📘 Changelog
 
-### 1.1.0 – Major Upgrade from PMPro extension to a standalone plugin
+### 1.0.0 - Initial Release
 - Standalone booking plugin core
 - Admin dashboard widget for stats
 - Booking list and management UI
 - Recurring booking logic (weekly)
 - Modular architecture for future extensions
-
-### 1.0.0 - Initial Release
-- developed as a PMPro extension
-- Booking list and management UI
 
 
 ---

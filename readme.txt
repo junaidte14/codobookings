@@ -4,7 +4,7 @@ Tags: booking, appointments, calendar, scheduler, events, reservation, wordpress
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,7 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 == Changelog ==
 
 = 1.0.0 =
+* Initial Release with following features
 * Added booking grid and single calendar shortcodes.
 * Added recurring booking logic (weekly).
 * Added guest bookings feature.

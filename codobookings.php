@@ -1,17 +1,21 @@
 <?php
 /**
 * Plugin Name: CodoBookings
-* Plugin URI: https://codoplex.com/
-* Description: A Booking Management System for WordPress. Extensible booking system with multiple calendars, availability slots, and recurring bookings. Modular and develper-friendly, with many actions/filters for extensibility.
-* Version: 1.1.0
+* Plugin URI: https://wpdemo.codoplex.com/codobookings/
+* Description: A Lightweight WordPress Booking & Appointment Plugin.
+* Version: 1.0.0
 * Author: CODOPLEX
-* License: GPLv2+
+* Author URI: https://codoplex.com/
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-2.0.html
+* Text Domain: codobookings
+* Domain Path: /languages
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Constants
-define( 'CODOBOOKINGS_VERSION', '1.1.0' );
+define( 'CODOBOOKINGS_VERSION', '1.0.0' );
 define( 'CODOBOOKINGS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CODOBOOKINGS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
