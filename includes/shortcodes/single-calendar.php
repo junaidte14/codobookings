@@ -11,6 +11,7 @@ function codobookings_calendar_shortcode( $atts ) {
     ), $atts, 'codo_calendar');
 
     // If no ID is given in the shortcode, check for ?calendar_id= in the URL
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only displaying public data
     $calendar_id = intval( $atts['id'] );
     if ( ! $calendar_id && isset( $_GET['calendar_id'] ) ) {
         $calendar_id = intval( $_GET['calendar_id'] );
@@ -52,8 +53,11 @@ function codobookings_calendar_shortcode( $atts ) {
 
     //var_dump($settings);
 
-    $current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $login_url   = wp_login_url( $current_url );
+    // ✅ Safely build current URL
+    $host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+    $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+    $current_url = ( is_ssl() ? 'https://' : 'http://' ) . $host . $request_uri;
+    $login_url = wp_login_url( esc_url_raw( $current_url ) );
 
     $confirmation_message = get_post_meta( $calendar_id, '_codo_confirmation_message', true ) ?: __( 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.', 'codobookings' );
 
@@ -90,7 +94,7 @@ function codobookings_calendar_shortcode( $atts ) {
     ?>
     <div class="codo-calendar-container">
         <?php if ( !empty($back_url) ) : ?>
-            <a href="<?php echo esc_url( $back_url ); ?>" class="button codo-back-btn">← <?php _e( 'Back to All Calendars', 'codobookings' ); ?></a>
+            <a href="<?php echo esc_url( $back_url ); ?>" class="button codo-back-btn">← <?php esc_html_e( 'Back to All Calendars', 'codobookings' ); ?></a>
         <?php endif; ?>
         <div class="codo-single-calendar">
             <?php if ( has_post_thumbnail( $calendar_id ) ) : ?>

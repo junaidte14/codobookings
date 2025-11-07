@@ -37,31 +37,31 @@ function codobookings_render_email_settings() {
     ?>
     <table class="form-table">
         <tr>
-            <th><?php _e( 'Send admin email notifications', 'codobookings' ); ?></th>
+            <th><?php esc_html_e( 'Send admin email notifications', 'codobookings' ); ?></th>
             <td>
                 <select name="codobookings_send_admin_email">
                     <option value="yes" <?php selected( get_option('codobookings_send_admin_email', 'yes'), 'yes' ); ?>>
-                        <?php _e( 'Yes', 'codobookings' ); ?>
+                        <?php esc_html_e( 'Yes', 'codobookings' ); ?>
                     </option>
                     <option value="no" <?php selected( get_option('codobookings_send_admin_email', 'yes'), 'no' ); ?>>
-                        <?php _e( 'No', 'codobookings' ); ?>
+                        <?php esc_html_e( 'No', 'codobookings' ); ?>
                     </option>
                 </select>
-                <p class="description"><?php _e( 'If enabled, the site administrator will receive a booking email notification whenever a new booking is created or updated.', 'codobookings' ); ?></p>
+                <p class="description"><?php esc_html_e( 'If enabled, the site administrator will receive a booking email notification whenever a new booking is created or updated.', 'codobookings' ); ?></p>
             </td>
         </tr>
         <tr>
-            <th><?php _e( 'Send user email notifications', 'codobookings' ); ?></th>
+            <th><?php esc_html_e( 'Send user email notifications', 'codobookings' ); ?></th>
             <td>
                 <select name="codobookings_send_user_email">
                     <option value="yes" <?php selected( get_option('codobookings_send_user_email', 'yes'), 'yes' ); ?>>
-                        <?php _e( 'Yes', 'codobookings' ); ?>
+                        <?php esc_html_e( 'Yes', 'codobookings' ); ?>
                     </option>
                     <option value="no" <?php selected( get_option('codobookings_send_user_email', 'yes'), 'no' ); ?>>
-                        <?php _e( 'No', 'codobookings' ); ?>
+                        <?php esc_html_e( 'No', 'codobookings' ); ?>
                     </option>
                 </select>
-                <p class="description"><?php _e( 'If enabled, users will receive an email confirmation after creating a booking and upon any status updates.', 'codobookings' ); ?></p>
+                <p class="description"><?php esc_html_e( 'If enabled, users will receive an email confirmation after creating a booking and upon any status updates.', 'codobookings' ); ?></p>
             </td>
         </tr>
     </table>

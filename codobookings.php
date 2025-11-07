@@ -60,4 +60,3 @@ function codobookings_deactivate() {
 }
 
 // Load textdomain
-add_action( 'init', function(){ load_plugin_textdomain( 'codobookings', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); } );

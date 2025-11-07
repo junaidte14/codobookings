@@ -53,9 +53,12 @@ function codobookings_send_new_booking_emails( $booking_id, $data ) {
 
     // === Admin Email ===
     if ( $send_admin === 'yes' ) {
-        $subject = apply_filters( 'codobookings_admin_email_subject',
-            sprintf( __( 'New booking received – %s', 'codobookings' ), $calendar_title ),
-            $booking_id, $data
+        $subject = apply_filters(
+            'codobookings_admin_email_subject',
+            /* translators: 1: Calendar title (e.g. "Consultation Calendar"). */
+            sprintf( __( 'New booking received – %1$s', 'codobookings' ), $calendar_title ),
+            $booking_id,
+            $data
         );
         $message = apply_filters( 'codobookings_admin_email_message',
             "<h1>".__('New Booking Created', 'codobookings')."</h1>".$details_html,
@@ -67,9 +70,12 @@ function codobookings_send_new_booking_emails( $booking_id, $data ) {
 
     // === User Email ===
     if ( $send_user === 'yes' && is_email( $attendee_email ) ) {
-        $subject = apply_filters( 'codobookings_user_email_subject',
-            sprintf( __( 'Your booking confirmation – %s', 'codobookings' ), $calendar_title ),
-            $booking_id, $data
+        $subject = apply_filters(
+            'codobookings_user_email_subject',
+            /* translators: 1: Calendar title (e.g. "Consultation Calendar"). */
+            sprintf( __( 'Your booking confirmation – %1$s', 'codobookings' ), $calendar_title ),
+            $booking_id,
+            $data
         );
         $message = apply_filters( 'codobookings_user_email_message',
             "<h1>".__('Your booking has been received!', 'codobookings')."</h1>".$details_html,
@@ -99,9 +105,16 @@ function codobookings_send_status_change_email( $booking_id, $status ) {
     $calendar_title = get_the_title( $calendar_id );
     $admin_email    = apply_filters( 'codobookings_admin_email_recipient', get_option( 'admin_email' ), $booking_id );
 
-    $subject = apply_filters( 'codobookings_status_email_subject',
-        sprintf( __( 'Booking #%d status updated to %s', 'codobookings' ), $booking_id, ucfirst($status) ),
-        $booking_id, $status
+    $subject = apply_filters(
+        'codobookings_status_email_subject',
+        sprintf(
+            /* translators: 1: Booking ID, 2: Booking status (e.g. Confirmed, Cancelled). */
+            __( 'Booking #%1$d status updated to %2$s', 'codobookings' ),
+            $booking_id,
+            ucfirst( $status )
+        ),
+        $booking_id,
+        $status
     );
 
     $headers = apply_filters( 'codobookings_email_headers', [ 'Content-Type: text/html; charset=UTF-8' ], $booking_id );

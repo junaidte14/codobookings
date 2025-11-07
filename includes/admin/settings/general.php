@@ -47,10 +47,10 @@ function codobookings_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) return;
 
     $tabs       = codobookings_get_settings_tabs();
-    $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general';
+    $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     if ( ! isset( $tabs[ $active_tab ] ) ) $active_tab = 'general';
 
-    if ( isset( $_GET['settings-updated'] ) ) {
+    if ( isset( $_GET['settings-updated'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         add_settings_error( 'codobookings_messages', 'codobookings_message',
             __( 'Settings saved successfully.', 'codobookings' ), 'updated' );
     }
@@ -115,7 +115,7 @@ function codobookings_render_general_settings() {
                 $current = get_option( 'codobookings_default_meeting_app', 'none' );
                 ?>
                 <tr>
-                    <th><?php _e( 'Default meeting app', 'codobookings' ); ?></th>
+                    <th><?php esc_html_e( 'Default meeting app', 'codobookings' ); ?></th>
                     <td>
                         <select name="codobookings_default_meeting_app">
                             <?php foreach ( $meeting_apps as $key => $label ) : ?>
@@ -124,7 +124,7 @@ function codobookings_render_general_settings() {
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <br><small><?php _e( 'Meeting app options can be added through officially supported extensions.', 'codobookings' ); ?></small>
+                        <br><small><?php esc_html_e( 'Meeting app options can be added through officially supported extensions.', 'codobookings' ); ?></small>
                     </td>
                 </tr>
                 <?php
@@ -139,7 +139,7 @@ function codobookings_render_general_settings() {
          *     $fields['my_custom_option'] = function() {
          *         ?>
          *         <tr>
-         *             <th><?php _e( 'My Custom Option', 'myplugin' ); ?></th>
+         *             <th><?php esc_html_e( 'My Custom Option', 'myplugin' ); ?></th>
          *             <td><input type="text" name="my_custom_option" value="<?php echo esc_attr( get_option('my_custom_option') ); ?>"></td>
          *         </tr>
          *         <?php

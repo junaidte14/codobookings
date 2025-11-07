@@ -21,40 +21,48 @@ function codobookings_calendar_settings_cb( $post ) {
     $recurrence = get_post_meta( $post->ID, '_codo_recurrence', true ) ?: 'none';
     ?>
 
-    <h4><?php _e( 'Weekly Availability', 'codobookings' ); ?></h4>
+    <h4><?php esc_html_e( 'Weekly Availability', 'codobookings' ); ?></h4>
     <p>
-        <button type="button" class="button" id="fill_standard_hours"><?php _e( 'Fill Standard 9–5 (Mon–Fri)', 'codobookings' ); ?></button>
-        <button type="button" class="button" id="copy_monday"><?php _e( 'Copy Monday → All Days', 'codobookings' ); ?></button>
-        <button type="button" id="export-json" class="button"><?php _e( 'Export JSON', 'codobookings' ); ?></button>
-        <button type="button" id="import-json" class="button"><?php _e( 'Import JSON', 'codobookings' ); ?></button>
+        <button type="button" class="button" id="fill_standard_hours"><?php esc_html_e( 'Fill Standard 9–5 (Mon–Fri)', 'codobookings' ); ?></button>
+        <button type="button" class="button" id="copy_monday"><?php esc_html_e( 'Copy Monday → All Days', 'codobookings' ); ?></button>
+        <button type="button" id="export-json" class="button"><?php esc_html_e( 'Export JSON', 'codobookings' ); ?></button>
+        <button type="button" id="import-json" class="button"><?php esc_html_e( 'Import JSON', 'codobookings' ); ?></button>
         <input type="file" id="import-file" accept="application/json" style="display:none;">
     </p>
     
     <div id="weekly-slots">
         <?php foreach ( $days as $day ) : ?>
             <div class="codo-day-section" data-day="<?php echo esc_attr( $day ); ?>">
-                <h4 style="margin-bottom:5px;"><?php echo ucfirst( $day ); ?></h4>
+                <h4 style="margin-bottom:5px;"><?php echo esc_html( ucfirst( $day ) ); ?></h4>
                 <div class="codo-slots-wrap">
                     <?php if ( ! empty( $slots[$day] ) ) :
                         foreach ( $slots[$day] as $i => $slot ) : ?>
                             <div class="codo-slot">
-                                <label><?php _e( 'Start', 'codobookings' ); ?></label>
-                                <input type="time" name="codo_weekly_slots[<?php echo esc_attr( $day ); ?>][<?php echo $i; ?>][start]" value="<?php echo esc_attr( $slot['start'] ?? '' ); ?>" />
-                                <label><?php _e( 'End', 'codobookings' ); ?></label>
-                                <input type="time" name="codo_weekly_slots[<?php echo esc_attr( $day ); ?>][<?php echo $i; ?>][end]" value="<?php echo esc_attr( $slot['end'] ?? '' ); ?>" />
+                                <label><?php esc_html_e( 'Start', 'codobookings' ); ?></label>
+                                <input 
+                                    type="time" 
+                                    name="codo_weekly_slots[<?php echo esc_attr( $day ); ?>][<?php echo esc_attr( $i ); ?>][start]" 
+                                    value="<?php echo esc_attr( $slot['start'] ?? '' ); ?>" 
+                                />
+                                <label><?php esc_html_e( 'End', 'codobookings' ); ?></label>
+                                <input 
+                                    type="time" 
+                                    name="codo_weekly_slots[<?php echo esc_attr( $day ); ?>][<?php echo esc_attr( $i ); ?>][end]" 
+                                    value="<?php echo esc_attr( $slot['end'] ?? '' ); ?>" 
+                                />
                                 <button type="button" class="button remove-slot">×</button>
                             </div>
                         <?php endforeach;
                     endif; ?>
                 </div>
-                <button type="button" class="button add-slot"><?php _e( 'Add Slot', 'codobookings' ); ?></button>
+                <button type="button" class="button add-slot"><?php esc_html_e( 'Add Slot', 'codobookings' ); ?></button>
             </div>
         <?php endforeach; ?>
     </div>
 
     <hr>
 
-    <h4><?php _e( 'Calendar Type', 'codobookings' ); ?></h4>
+    <h4><?php esc_html_e( 'Calendar Type', 'codobookings' ); ?></h4>
 
     <?php
     // Default recurrence types with descriptions
@@ -323,10 +331,18 @@ add_action( 'save_post', 'codobookings_save_calendar_meta', 10, 2 );
 function codobookings_save_calendar_meta( $post_id, $post ) {
     if ( $post->post_type !== 'codo_calendar' ) return;
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
-    if ( ! isset( $_POST['codobookings_calendar_nonce'] ) || ! wp_verify_nonce( $_POST['codobookings_calendar_nonce'], 'codobookings_save_calendar' ) ) return;
-    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-
-    $slots = $_POST['codo_weekly_slots'] ?? array();
+    // ✅ Properly unslash and sanitize nonce before verifying
+    if ( ! isset( $_POST['codobookings_calendar_nonce'] ) ) {
+        return;
+    }
+    $nonce = sanitize_text_field( wp_unslash( $_POST['codobookings_calendar_nonce'] ) );
+    if ( ! wp_verify_nonce( $nonce, 'codobookings_save_calendar' ) ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+    $slots = isset( $_POST['codo_weekly_slots'] ) ? wp_unslash( $_POST['codo_weekly_slots'] ) : array();
     // sanitize slots
     $days = array('monday','tuesday','wednesday','thursday','friday','saturday','sunday');
     foreach($days as $day){
@@ -362,10 +378,10 @@ function codobookings_add_confirmation_message_field( $post ) {
     }
     ?>
     <hr>
-    <h4><?php _e( 'Confirmation Message', 'codobookings' ); ?></h4>
+    <h4><?php esc_html_e( 'Confirmation Message', 'codobookings' ); ?></h4>
     <p>
         <textarea name="codo_confirmation_message" rows="3" style="width:100%;"><?php echo esc_textarea( $message ); ?></textarea>
-        <small><?php _e( 'This message will be shown to the user after they confirm their booking.', 'codobookings' ); ?></small>
+        <small><?php esc_html_e( 'This message will be shown to the user after they confirm their booking.', 'codobookings' ); ?></small>
     </p>
     <?php
 }
@@ -408,24 +424,24 @@ function codobookings_sidebar_settings_cb( $post ) {
     <p>
         <label>
             <input type="checkbox" name="codo_sidebar_settings[show_title]" value="yes" <?php checked( $settings['show_title'], 'yes' ); ?> />
-            <?php _e( 'Show Title', 'codobookings' ); ?>
+            <?php esc_html_e( 'Show Title', 'codobookings' ); ?>
         </label>
-        <p class="description"><?php _e( 'Toggle to display the calendar title on the frontend.', 'codobookings' ); ?></p>
+        <p class="description"><?php esc_html_e( 'Toggle to display the calendar title on the frontend.', 'codobookings' ); ?></p>
     </p>
 
     <p>
         <label>
             <input type="checkbox" name="codo_sidebar_settings[allow_guest]" value="yes" <?php checked( $settings['allow_guest'], 'yes' ); ?> />
-            <?php _e( 'Allow Guest Bookings', 'codobookings' ); ?>
+            <?php esc_html_e( 'Allow Guest Bookings', 'codobookings' ); ?>
         </label>
-        <p class="description"><?php _e( 'Allow users who are not logged in to make bookings with only providing their email address.', 'codobookings' ); ?></p>
+        <p class="description"><?php esc_html_e( 'Allow users who are not logged in to make bookings with only providing their email address.', 'codobookings' ); ?></p>
     </p>
 
     <?php
     // Output extra fields added via hooks
     if( ! empty( $extra_fields ) && is_array( $extra_fields ) ) {
         foreach( $extra_fields as $field ) {
-            echo '<p>' . $field . '</p>';
+            echo '<p>' . esc_html( $field ) . '</p>';
         }
     }
 }

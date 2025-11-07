@@ -75,18 +75,18 @@ function codobookings_calendars_grid_shortcode( $atts ) {
             <div class="codo-calendar-item">
                 <?php if ( $img ) : ?>
                     <div class="codo-calendar-thumb-wrap">
-                        <a href="<?php echo esc_url( $details_url ); ?>">
-                            <?php echo $img; ?>
+                        <a href="<?php echo esc_url( $details_url ); ?>" class="codo-calendar-link">
+                            <?php echo wp_kses_post( $img ); ?>
                         </a>
                     </div>
                 <?php endif; ?>
                 <div class="codo-calendar-content">
-                    <h3 class="codo-calendar-title"><?php echo $title; ?></h3>
+                    <h3 class="codo-calendar-title"><?php echo esc_html( $title ); ?></h3>
                     <?php if ( ! empty( trim( $desc ) ) ) : ?>
-                        <p class="codo-calendar-desc"><?php echo $desc; ?></p>
+                        <p class="codo-calendar-desc"><?php echo esc_html( $desc ); ?></p>
                     <?php endif; ?>
                     <a href="<?php echo esc_url( $details_url ); ?>" class="button codo-book-btn">
-                        <?php _e( 'Book Now', 'codobookings' ); ?>
+                        <?php esc_html_e( 'Book Now', 'codobookings' ); ?>
                     </a>
                 </div>
             </div>

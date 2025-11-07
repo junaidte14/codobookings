@@ -1,12 +1,13 @@
-=== CodoBookings – Lightweight WordPress Booking & Appointment Plugin ===
+=== CodoBookings ===
 Contributors: junaidte14
-Tags: booking, appointments, calendar, scheduler, events, reservation, wordpress-booking
+Tags: booking, appointments, calendar, scheduler, wordpress-booking
 Requires at least: 6.0
-Tested up to: 6.7
-Requires PHP: 7.4
+Tested up to: 6.8
 Stable tag: 1.0.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+A Lightweight WordPress Booking & Appointment System
 
 == Description ==
 

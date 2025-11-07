@@ -5,6 +5,9 @@ add_action('wp_ajax_codo_get_calendar', 'codo_get_calendar');
 add_action('wp_ajax_nopriv_codo_get_calendar', 'codo_get_calendar');
 
 function codo_get_calendar() {
+    // ✅ Verify nonce first
+    check_ajax_referer('codobookings_nonce', 'nonce');
+
     $calendar_id = absint($_POST['calendar_id'] ?? 0);
     if (!$calendar_id) {
         wp_send_json_error(['message' => 'Invalid calendar ID']);

@@ -46,7 +46,8 @@ function codobookings_booking_times_meta_box( $post ) {
 
     if ( $recurrence === 'weekly' ) {
         $recurrence_label = sprintf(
-            __('📅 This is a <strong>Weekly Recurring Booking</strong> every <strong>%s</strong> from <strong>%s</strong> to <strong>%s</strong> (Local Time).', 'codobookings'),
+            /* translators: 1: Day of week, 2: Start time, 3: End time */
+            __('📅 This is a <strong>Weekly Recurring Booking</strong> every <strong>%1$s</strong> from <strong>%2$s</strong> to <strong>%3$s</strong> (Local Time).', 'codobookings'),
             $day_display,
             esc_html( $start_local_st ),
             esc_html( $end_local_st )
@@ -54,31 +55,31 @@ function codobookings_booking_times_meta_box( $post ) {
     } else {
         $recurrence_label = __('🕐 This is a <strong>One-Time Booking</strong>.', 'codobookings');
     }
-
+    wp_nonce_field( 'codo_booking_save', 'codo_booking_nonce' );
     ?>
     <div style="background:#f6f7f7; border:1px solid #ccd0d4; padding:12px 15px; margin-bottom:15px; border-radius:4px;">
         <?php echo wp_kses_post( $recurrence_label ); ?>
     </div>
     <p>
-        <label for="codo_start"><?php _e('Start Time', 'codobookings'); ?></label><br>
+        <label for="codo_start"><?php esc_html_e('Start Time', 'codobookings'); ?></label><br>
         <input type="datetime-local" id="codo_start" name="codo_start" value="<?php echo esc_attr($start_local); ?>" style="width:100%;">
     </p>
     <p>
-        <em><?php _e('Times are shown in your WordPress admin timezone.', 'codobookings'); ?></em>
+        <em><?php esc_html_e('Times are shown in your WordPress admin timezone.', 'codobookings'); ?></em>
     </p>
     <p>
-        <label for="codo_end"><?php _e('End Time', 'codobookings'); ?></label><br>
+        <label for="codo_end"><?php esc_html_e('End Time', 'codobookings'); ?></label><br>
         <input type="datetime-local" id="codo_end" name="codo_end" value="<?php echo esc_attr($end_local); ?>" style="width:100%;">
     </p>
     <p>
-        <em><?php _e('Times are shown in your WordPress admin timezone.', 'codobookings'); ?></em>
+        <em><?php esc_html_e('Times are shown in your WordPress admin timezone.', 'codobookings'); ?></em>
     </p>
     <p>
-        <label for="codo_email"><?php _e('Email', 'codobookings'); ?></label><br>
+        <label for="codo_email"><?php esc_html_e('Email', 'codobookings'); ?></label><br>
         <input type="email" id="codo_email" name="codo_email" value="<?php echo esc_attr($email); ?>" style="width:100%;">
     </p>
     <p>
-        <label for="codo_status"><?php _e('Status', 'codobookings'); ?></label><br>
+        <label for="codo_status"><?php esc_html_e('Status', 'codobookings'); ?></label><br>
         <select id="codo_status" name="codo_status" style="width:100%;">
             <?php
             $statuses = ['pending','confirmed','cancelled','completed'];
@@ -95,12 +96,19 @@ function codobookings_booking_times_meta_box( $post ) {
 // Save the additional fields
 add_action( 'save_post_codo_booking', function( $post_id ) {
     if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return;
+    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
+    // ✅ Verify nonce (replace with your actual nonce field name)
+    if ( ! isset( $_POST['codo_booking_nonce'] ) || 
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['codo_booking_nonce'] ) ), 'codo_booking_save' ) ) {
+        return;
+    }
 
     $tz = new DateTimeZone( get_option('timezone_string') ?: 'UTC' );
 
     // Start
     if ( isset($_POST['codo_start']) ) {
-        $start_local = sanitize_text_field( $_POST['codo_start'] );
+        $start_local = sanitize_text_field( wp_unslash( $_POST['codo_start'] ) );
         try {
             $start_utc = ( new DateTimeImmutable( $start_local, $tz ) )->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
             update_post_meta( $post_id, '_codo_start', $start_utc );
@@ -109,7 +117,7 @@ add_action( 'save_post_codo_booking', function( $post_id ) {
 
     // End
     if ( isset($_POST['codo_end']) && $_POST['codo_end'] !== '' ) {
-        $end_local = sanitize_text_field( $_POST['codo_end'] );
+        $end_local = sanitize_text_field( wp_unslash( $_POST['codo_end']) );
         try {
             $end_utc = ( new DateTimeImmutable( $end_local, $tz ) )->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
             update_post_meta( $post_id, '_codo_end', $end_utc );
@@ -118,11 +126,11 @@ add_action( 'save_post_codo_booking', function( $post_id ) {
 
     // Email
     if ( isset($_POST['codo_email']) ) {
-        update_post_meta( $post_id, '_codo_attendee_email', sanitize_email($_POST['codo_email']) );
+        update_post_meta( $post_id, '_codo_attendee_email', sanitize_email(wp_unslash( $_POST['codo_email'] )) );
     }
 
     // Status
     if ( isset($_POST['codo_status']) ) {
-        update_post_meta( $post_id, '_codo_status', sanitize_text_field($_POST['codo_status']) );
+        update_post_meta( $post_id, '_codo_status', sanitize_text_field(wp_unslash( $_POST['codo_status'])) );
     }
 });

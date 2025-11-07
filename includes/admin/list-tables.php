@@ -22,10 +22,10 @@ function codobookings_calendar_columns_data( $column, $post_id ) {
     }
     if ( $column === 'recurrence' ) {
         $recurrence = get_post_meta( $post_id, '_codo_recurrence', true );
-        if ( $recurrence == 'none' ) {
-            echo 'one-time';
+        if ( $recurrence === 'none' ) {
+            echo esc_html__( 'one-time', 'codobookings' );
         } else {
-            echo $recurrence;
+            echo esc_html( $recurrence );
         }
     }
 
@@ -33,16 +33,24 @@ function codobookings_calendar_columns_data( $column, $post_id ) {
         $terms = get_the_terms( $post_id, 'calendar_category' );
         if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
             $links = array();
+
             foreach ( $terms as $term ) {
-                $url = esc_url( add_query_arg( array(
-                    'post_type' => 'codo_calendar',
-                    'calendar_category' => $term->slug,
-                ), 'edit.php' ) );
+                $url = esc_url( add_query_arg(
+                    array(
+                        'post_type'          => 'codo_calendar',
+                        'calendar_category'  => $term->slug,
+                    ),
+                    'edit.php'
+                ) );
+
                 $links[] = '<a href="' . $url . '">' . esc_html( $term->name ) . '</a>';
             }
-            echo implode( ', ', $links );
+
+            // Safe HTML output (links only)
+            echo wp_kses_post( implode( ', ', $links ) );
+
         } else {
-            echo '<span style="color:#aaa;">' . __( '—', 'codobookings' ) . '</span>';
+            echo '<span style="color:#aaa;">' . esc_html__( '—', 'codobookings' ) . '</span>';
         }
     }
 }
@@ -93,9 +101,9 @@ function codobookings_calendar_filter_dropdown() {
     $selected = isset( $_GET['recurrence_filter'] ) ? $_GET['recurrence_filter'] : '';
     ?>
     <select name="recurrence_filter">
-        <option value=""><?php _e( 'All Types', 'codobookings' ); ?></option>
-        <option value="none" <?php selected( $selected, 'none' ); ?>><?php _e( 'One-time', 'codobookings' ); ?></option>
-        <option value="weekly" <?php selected( $selected, 'weekly' ); ?>><?php _e( 'Weekly', 'codobookings' ); ?></option>
+        <option value=""><?php esc_html_e( 'All Types', 'codobookings' ); ?></option>
+        <option value="none" <?php selected( $selected, 'none' ); ?>><?php esc_html_e( 'One-time', 'codobookings' ); ?></option>
+        <option value="weekly" <?php selected( $selected, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'codobookings' ); ?></option>
     </select>
     <?php
 }
@@ -286,7 +294,7 @@ function codobookings_add_booking_filters() {
     echo '<option value="">' . esc_html__( 'All Calendars', 'codobookings' ) . '</option>';
     foreach ( $used_calendar_ids as $calendar_id ) {
         $selected = ( isset( $_GET['codo_calendar_filter'] ) && $_GET['codo_calendar_filter'] == $calendar_id ) ? 'selected' : '';
-        echo '<option value="' . esc_attr( $calendar_id ) . '" ' . $selected . '>' . esc_html( get_the_title( $calendar_id ) ) . '</option>';
+        echo '<option value="' . esc_attr( $calendar_id ) . '" ' . esc_attr( $selected ) . '>' . esc_html( get_the_title( $calendar_id ) ) . '</option>';
     }
     echo '</select>';
 
@@ -295,8 +303,7 @@ function codobookings_add_booking_filters() {
     echo '<select name="codo_status_filter">';
     echo '<option value="">' . esc_html__( 'All Statuses', 'codobookings' ) . '</option>';
     foreach ( $statuses as $status ) {
-        $selected = ( isset( $_GET['codo_status_filter'] ) && $_GET['codo_status_filter'] === $status ) ? 'selected' : '';
-        echo '<option value="' . esc_attr( $status ) . '" ' . $selected . '>' . esc_html( ucfirst( $status ) ) . '</option>';
+        echo '<option value="' . esc_attr( $status ) . '" ' . selected( $_GET['codo_status_filter'] ?? '', $status, false ) . '>' . esc_html( ucfirst( $status ) ) . '</option>';
     }
     echo '</select>';
 }
