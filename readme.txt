@@ -11,7 +11,7 @@ A Lightweight WordPress Booking & Appointment System
 
 == Description ==
 
-CodoBookings is a modern, lightweight, booking and appointment management plugin for WordPress. It’s designed to make scheduling, managing, and tracking appointments effortless — with **no external dependencies**.
+CodoBookings is a modern, lightweight booking and appointment-management plugin for WordPress. It’s designed to make scheduling, managing, and tracking appointments effortless.
 
 Whether you're a coach, consultant, tutor, or agency, CodoBookings helps you manage your entire booking process directly inside WordPress — cleanly, securely, and efficiently.
 
@@ -115,12 +115,10 @@ CodoBookings offers several hooks to extend functionality:
 
 == Planned Extensions ==
 
-| Extension | Description | Status |
-|------------|-------------|--------|
-| PMPro Integration | Restrict or enable bookings based on membership level. | Coming soon |
-| WooCommerce Integration | Sell bookings as WooCommerce products with checkout flow. | Coming soon |
-| Google Calendar Sync | Sync bookings with Google Calendar. | Coming soon |
-| Custom Email Templates | Create branded, custom email templates. | Coming soon |
+* **PMPro Integration** – Restrict or enable bookings based on membership level. *(Coming soon)*
+* **WooCommerce Integration** – Sell bookings as WooCommerce products with a full checkout flow. *(Coming soon)*
+* **Google Calendar Sync** – Sync bookings with Google Calendar. *(Coming soon)*
+* **Custom Email Templates** – Create branded, customizable email templates. *(Coming soon)*
 
 ---
 
