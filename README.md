@@ -94,6 +94,10 @@ Once activated:
 
 ## 📘 Changelog
 
+### 1.2.0 - Features and Improvements
+- Added User Fields Extension link on dashboard page
+- Updated the translations file
+
 ### 1.1.0 - Features and Improvements
 - New hooks introduced in PHP code
 - Some wording changes

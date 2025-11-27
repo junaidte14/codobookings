@@ -36,7 +36,7 @@ function codobookings_dashboard() {
                         <a href="<?php echo esc_url( admin_url( 'admin.php?page=codobookings_settings' ) ); ?>" class="button-primary" rel="noopener noreferrer">
                             <?php esc_html_e( 'Go to Settings', 'codobookings' ); ?>
                         </a>
-                        <a href="https://codoplex.com/contact" target="_blank" class="button-secondary" rel="noopener noreferrer">
+                        <a href="https://wpdemo.codoplex.com/codobookings/documentation" target="_blank" class="button-secondary" rel="noopener noreferrer">
                             <?php esc_html_e( 'View Documentation', 'codobookings' ); ?>
                         </a>
                     </p>
@@ -85,7 +85,7 @@ function codobookings_dashboard() {
                         <li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=codo_calendar' ) ); ?>"><span class="dashicons dashicons-calendar"></span> <?php esc_html_e( 'Manage Calendars', 'codobookings' ); ?></a></li>
                         <li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=codo_booking' ) ); ?>"><span class="dashicons dashicons-list-view"></span> <?php esc_html_e( 'Manage Bookings', 'codobookings' ); ?></a></li>
                         <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=codobookings_settings' ) ); ?>"><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Settings', 'codobookings' ); ?></a></li>
-                        <li><a href="https://care.codoplex.com/" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Get Support', 'codobookings' ); ?></a></li>
+                        <li><a href="https://codoplex.com/contact" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Get Support', 'codobookings' ); ?></a></li>
                     </ul>
                 </div>
             </div>
@@ -99,22 +99,27 @@ function codobookings_dashboard() {
 
                     <ul class="codobookings-addons-list">
                         <li>
-                            <strong>CodoBookings for PMPro</strong>
+                            <strong><?php esc_html_e( 'User Fields [Free]', 'codobookings' ); ?></strong>
+                            <p><?php esc_html_e( 'Enhance your CodoBookings system by adding customizable user fields for smarter, more detailed booking data collection.', 'codobookings' ); ?></p>
+                            <a href="https://codoplex.com/product/user-fields-extension-for-codobookings-plugin/" class="button button-small" target="_blank"><?php esc_html_e( 'Free Download', 'codobookings' ); ?></a>
+                        </li>
+                        <li>
+                            <strong><?php esc_html_e( 'CodoBookings for PMPro', 'codobookings' ); ?></strong>
                             <p><?php esc_html_e( 'Sell bookings as PMPro membership levels with advanced checkout.', 'codobookings' ); ?></p>
                             <a href="https://codoplex.com/contact" class="button button-small" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Coming Soon', 'codobookings' ); ?></a>
                         </li>
                         <li>
-                            <strong>CodoBookings for WooCommerce</strong>
+                            <strong><?php esc_html_e( 'CodoBookings for WooCommerce', 'codobookings' ); ?></strong>
                             <p><?php esc_html_e( 'Sell bookings as WooCommerce products with advanced checkout.', 'codobookings' ); ?></p>
                             <a href="https://codoplex.com/contact" class="button button-small" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Coming Soon', 'codobookings' ); ?></a>
                         </li>
                         <li>
-                            <strong>Google Meet Sync</strong>
+                            <strong><?php esc_html_e( 'Google Meet Sync', 'codobookings' ); ?></strong>
                             <p><?php esc_html_e( 'Automatically create and manage Google Meet links for booked slots.', 'codobookings' ); ?></p>
                             <a href="https://codoplex.com/contact" class="button button-small" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Coming Soon', 'codobookings' ); ?></a>
                         </li>
                         <li>
-                            <strong>Zoom Integration</strong>
+                            <strong><?php esc_html_e( 'Zoom Integration', 'codobookings' ); ?></strong>
                             <p><?php esc_html_e( 'Seamlessly connect Zoom meetings to bookings.', 'codobookings' ); ?></p>
                             <a href="https://codoplex.com/contact" class="button button-small" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Coming Soon', 'codobookings' ); ?></a>
                         </li>
@@ -125,7 +130,7 @@ function codobookings_dashboard() {
                     <h2><?php esc_html_e( 'Need Help?', 'codobookings' ); ?></h2>
                     <p><?php esc_html_e( 'Explore our documentation or reach out to our support team for assistance.', 'codobookings' ); ?></p>
                     <p>
-                        <a href="https://codoplex.com/contact" class="button button-secondary" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View Docs', 'codobookings' ); ?></a>
+                        <a href="https://wpdemo.codoplex.com/codobookings/documentation" class="button button-secondary" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View Docs', 'codobookings' ); ?></a>
                         <a href="https://codoplex.com/contact" class="button button-primary" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Get Support', 'codobookings' ); ?></a>
                     </p>
                 </div>

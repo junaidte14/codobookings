@@ -3,7 +3,7 @@ Contributors: junaidte14
 Tags: booking, appointments, calendar, scheduler, wordpress-booking
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,10 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 
 == Changelog ==
 
+= 1.2.0 =
+* Added User Fields Extension link on dashboard page
+* Updated the translations file
+
 = 1.1.0 =
 * New hooks introduced in PHP code
 * Some wording changes
@@ -101,6 +105,9 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 ---
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Added user fields extension link on dashboard page and updated the translations file
 
 = 1.1.0 =
 Introduced new PHP/JS hooks, improved wording, and fixed confirmation message visibility.

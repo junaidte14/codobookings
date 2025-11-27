@@ -13,110 +13,136 @@ msgstr ""
 "X-Generator: Poedit 3.4\n"
 "X-Domain: codobookings\n"
 
-#: includes/admin/dashboard.php:16
+#: includes/admin/dashboard.php:21
 msgid "CodoBookings Dashboard"
 msgstr ""
 
-#: includes/admin/dashboard.php:26
+#: includes/admin/dashboard.php:31
 msgid "Welcome to CodoBookings"
 msgstr ""
 
-#: includes/admin/dashboard.php:28
+#: includes/admin/dashboard.php:33
 msgid ""
 "Manage your bookings, calendars, and availability directly from your "
 "WordPress dashboard. Easily integrate with Google Calendar and automate "
 "appointment scheduling."
 msgstr ""
 
-#: includes/admin/dashboard.php:32
+#: includes/admin/dashboard.php:37
 msgid "Go to Settings"
 msgstr ""
 
-#: includes/admin/dashboard.php:35
+#: includes/admin/dashboard.php:40
 msgid "View Documentation"
 msgstr ""
 
-#: includes/admin/dashboard.php:42
+#: includes/admin/dashboard.php:47
 msgid "System Overview"
 msgstr ""
 
-#: includes/admin/dashboard.php:49
+#: includes/admin/dashboard.php:54
 msgid "Active Calendars"
 msgstr ""
 
-#: includes/admin/dashboard.php:53
+#: includes/admin/dashboard.php:58
 msgid "Total Bookings"
 msgstr ""
 
-#: includes/admin/dashboard.php:57
-msgid "Upcoming Bookings (one-time)"
-msgstr ""
-
-#: includes/admin/dashboard.php:82
+#: includes/admin/dashboard.php:83
 msgid "Quick Actions"
 msgstr ""
 
-#: includes/admin/dashboard.php:84
+#: includes/admin/dashboard.php:85
 msgid "Manage Calendars"
 msgstr ""
 
-#: includes/admin/dashboard.php:85
+#: includes/admin/dashboard.php:86
 msgid "Manage Bookings"
 msgstr ""
 
-#: includes/admin/dashboard.php:86 includes/admin/menu.php:37
+#: includes/admin/dashboard.php:87 includes/admin/menu.php:37
 #: includes/admin/menu.php:38
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/dashboard.php:87 includes/admin/dashboard.php:128
+#: includes/admin/dashboard.php:88 includes/admin/dashboard.php:134
 msgid "Get Support"
 msgstr ""
 
-#: includes/admin/dashboard.php:96
+#: includes/admin/dashboard.php:97
 msgid "CodoBookings Extensions"
 msgstr ""
 
-#: includes/admin/dashboard.php:97
+#: includes/admin/dashboard.php:98
 msgid ""
 "Enhance your booking experience with our official add-ons and integrations."
 msgstr ""
 
 #: includes/admin/dashboard.php:102
-msgid "Sell bookings as PMPro membership levels with advanced checkout."
+msgid "User Fields [Free]"
 msgstr ""
 
-#: includes/admin/dashboard.php:103 includes/admin/dashboard.php:108
-#: includes/admin/dashboard.php:113 includes/admin/dashboard.php:118
-msgid "Coming Soon"
+#: includes/admin/dashboard.php:103
+msgid ""
+"Enhance your CodoBookings system by adding customizable user fields for "
+"smarter, more detailed booking data collection."
+msgstr ""
+
+#: includes/admin/dashboard.php:104
+msgid "Free Download"
 msgstr ""
 
 #: includes/admin/dashboard.php:107
-msgid "Sell bookings as WooCommerce products with advanced checkout."
+msgid "CodoBookings for PMPro"
+msgstr ""
+
+#: includes/admin/dashboard.php:108
+msgid "Sell bookings as PMPro membership levels with advanced checkout."
+msgstr ""
+
+#: includes/admin/dashboard.php:109 includes/admin/dashboard.php:114
+#: includes/admin/dashboard.php:119 includes/admin/dashboard.php:124
+msgid "Coming Soon"
 msgstr ""
 
 #: includes/admin/dashboard.php:112
-msgid "Automatically create and manage Google Meet links for booked slots."
+msgid "CodoBookings for WooCommerce"
+msgstr ""
+
+#: includes/admin/dashboard.php:113
+msgid "Sell bookings as WooCommerce products with advanced checkout."
 msgstr ""
 
 #: includes/admin/dashboard.php:117
+msgid "Google Meet Sync"
+msgstr ""
+
+#: includes/admin/dashboard.php:118
+msgid "Automatically create and manage Google Meet links for booked slots."
+msgstr ""
+
+#: includes/admin/dashboard.php:122
+msgid "Zoom Integration"
+msgstr ""
+
+#: includes/admin/dashboard.php:123
 msgid "Seamlessly connect Zoom meetings to bookings."
 msgstr ""
 
-#: includes/admin/dashboard.php:124
+#: includes/admin/dashboard.php:130
 msgid "Need Help?"
 msgstr ""
 
-#: includes/admin/dashboard.php:125
+#: includes/admin/dashboard.php:131
 msgid ""
 "Explore our documentation or reach out to our support team for assistance."
 msgstr ""
 
-#: includes/admin/dashboard.php:127
+#: includes/admin/dashboard.php:133
 msgid "View Docs"
 msgstr ""
 
-#: includes/admin/list-tables.php:9 includes/admin/list-tables.php:170
+#: includes/admin/list-tables.php:9 includes/admin/list-tables.php:227
 #: includes/core/post-types.php:8 includes/core/post-types.php:10
 msgid "Calendar"
 msgstr ""
@@ -133,67 +159,71 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: includes/admin/list-tables.php:45
-msgid "—"
+#: includes/admin/list-tables.php:26
+msgid "one-time"
 msgstr ""
 
-#: includes/admin/list-tables.php:57
+#: includes/admin/list-tables.php:53
+msgid ""
+msgstr ""
+
+#: includes/admin/list-tables.php:65
 msgid "View"
 msgstr ""
 
-#: includes/admin/list-tables.php:73 includes/core/post-types.php:15
+#: includes/admin/list-tables.php:81 includes/core/post-types.php:15
 msgid "View Calendar"
 msgstr ""
 
-#: includes/admin/list-tables.php:75
+#: includes/admin/list-tables.php:83
 msgid "Calendar updated."
 msgstr ""
 
-#: includes/admin/list-tables.php:76
+#: includes/admin/list-tables.php:84
 msgid "Calendar published."
 msgstr ""
 
-#: includes/admin/list-tables.php:77
+#: includes/admin/list-tables.php:85
 msgid "Calendar saved."
 msgstr ""
 
-#: includes/admin/list-tables.php:78
+#: includes/admin/list-tables.php:86
 msgid "Calendar draft updated."
 msgstr ""
 
-#: includes/admin/list-tables.php:96
+#: includes/admin/list-tables.php:115
 msgid "All Types"
 msgstr ""
 
-#: includes/admin/list-tables.php:97
+#: includes/admin/list-tables.php:116
 msgid "One-time"
 msgstr ""
 
-#: includes/admin/list-tables.php:98 includes/core/metaboxes.php:67
+#: includes/admin/list-tables.php:117 includes/core/metaboxes.php:36
 msgid "Weekly"
 msgstr ""
 
-#: includes/admin/list-tables.php:134
+#: includes/admin/list-tables.php:172
 msgid "All Categories"
 msgstr ""
 
-#: includes/admin/list-tables.php:169 includes/core/post-types.php:74
+#: includes/admin/list-tables.php:226 includes/core/post-types.php:74
 msgid "Booking"
 msgstr ""
 
-#: includes/admin/list-tables.php:171
+#: includes/admin/list-tables.php:228
 msgid "Date/Time (UTC / Local)"
 msgstr ""
 
-#: includes/admin/list-tables.php:172 includes/admin/manage-bookings.php:81
+#: includes/admin/list-tables.php:229 includes/admin/manage-bookings.php:82
 msgid "Status"
 msgstr ""
 
-#: includes/admin/list-tables.php:286
+#: includes/admin/list-tables.php:373
 msgid "All Calendars"
 msgstr ""
 
-#: includes/admin/list-tables.php:296
+#: includes/admin/list-tables.php:387
 msgid "All Statuses"
 msgstr ""
 
@@ -201,30 +231,30 @@ msgstr ""
 msgid "Booking Details"
 msgstr ""
 
-#: includes/admin/manage-bookings.php:49
+#: includes/admin/manage-bookings.php:50
 #, php-format
 msgid ""
-"📅 This is a <strong>Weekly Recurring Booking</strong> every <strong>%s</"
-"strong> from <strong>%s</strong> to <strong>%s</strong> (Local Time)."
+" This is a <strong>Weekly Recurring Booking</strong> every <strong>%1$s</"
+"strong> from <strong>%2$s</strong> to <strong>%3$s</strong> (Local Time)."
 msgstr ""
 
-#: includes/admin/manage-bookings.php:55
-msgid "🕐 This is a <strong>One-Time Booking</strong>."
+#: includes/admin/manage-bookings.php:56
+msgid " This is a <strong>One-Time Booking</strong>."
 msgstr ""
 
-#: includes/admin/manage-bookings.php:63
+#: includes/admin/manage-bookings.php:64
 msgid "Start Time"
 msgstr ""
 
-#: includes/admin/manage-bookings.php:67 includes/admin/manage-bookings.php:74
+#: includes/admin/manage-bookings.php:68 includes/admin/manage-bookings.php:75
 msgid "Times are shown in your WordPress admin timezone."
 msgstr ""
 
-#: includes/admin/manage-bookings.php:70
+#: includes/admin/manage-bookings.php:71
 msgid "End Time"
 msgstr ""
 
-#: includes/admin/manage-bookings.php:77
+#: includes/admin/manage-bookings.php:78
 msgid "Email"
 msgstr ""
 
@@ -272,111 +302,123 @@ msgid ""
 "booking and upon any status updates."
 msgstr ""
 
-#: includes/admin/settings/general.php:35
+#: includes/admin/settings/general.php:24
 msgid "General"
 msgstr ""
 
-#: includes/admin/settings/general.php:55
+#: includes/admin/settings/general.php:49
 msgid "Settings saved successfully."
 msgstr ""
 
-#: includes/admin/settings/general.php:61
+#: includes/admin/settings/general.php:57
 msgid "CodoBookings Settings"
 msgstr ""
 
-#: includes/admin/settings/general.php:113
+#: includes/admin/settings/general.php:118
 msgid "None"
 msgstr ""
 
-#: includes/admin/settings/general.php:118
+#: includes/admin/settings/general.php:123
 msgid "Default meeting app"
 msgstr ""
 
-#: includes/admin/settings/general.php:127
+#: includes/admin/settings/general.php:132
 msgid ""
 "Meeting app options can be added through officially supported extensions."
 msgstr ""
 
-#: includes/core/metaboxes.php:8 includes/core/metaboxes.php:381
+#: includes/core/metaboxes.php:11 includes/core/metaboxes.php:203
 msgid "Calendar Settings"
 msgstr ""
 
-#: includes/core/metaboxes.php:24
-msgid "Weekly Availability"
-msgstr ""
-
-#: includes/core/metaboxes.php:26
-msgid "Fill Standard 9–5 (Mon–Fri)"
-msgstr ""
-
-#: includes/core/metaboxes.php:27
-msgid "Copy Monday → All Days"
-msgstr ""
-
-#: includes/core/metaboxes.php:28
-msgid "Export JSON"
-msgstr ""
-
-#: includes/core/metaboxes.php:29
-msgid "Import JSON"
-msgstr ""
-
-#: includes/core/metaboxes.php:41
-msgid "Start"
-msgstr ""
-
-#: includes/core/metaboxes.php:43
-msgid "End"
-msgstr ""
-
-#: includes/core/metaboxes.php:50
-msgid "Add Slot"
-msgstr ""
-
-#: includes/core/metaboxes.php:57
-msgid "Calendar Type"
-msgstr ""
-
-#: includes/core/metaboxes.php:63
+#: includes/core/metaboxes.php:32
 msgid "One-time Booking"
 msgstr ""
 
-#: includes/core/metaboxes.php:64
+#: includes/core/metaboxes.php:33
 msgid "A single event that occurs only once."
 msgstr ""
 
-#: includes/core/metaboxes.php:68
+#: includes/core/metaboxes.php:37
 msgid "Repeats every week on the same day."
 msgstr ""
 
-#: includes/core/metaboxes.php:361 includes/shortcodes/single-calendar.php:58
+#: includes/core/metaboxes.php:43
+msgid "Weekly Availability"
+msgstr ""
+
+#: includes/core/metaboxes.php:45
+msgid "Fill Standard 95 (MonFri)"
+msgstr ""
+
+#: includes/core/metaboxes.php:46
+msgid "Copy Monday  All Days"
+msgstr ""
+
+#: includes/core/metaboxes.php:47
+msgid "Export JSON"
+msgstr ""
+
+#: includes/core/metaboxes.php:48
+msgid "Import JSON"
+msgstr ""
+
+#: includes/core/metaboxes.php:60
+msgid "Start"
+msgstr ""
+
+#: includes/core/metaboxes.php:62
+msgid "End"
+msgstr ""
+
+#: includes/core/metaboxes.php:69
+msgid "Add Slot"
+msgstr ""
+
+#: includes/core/metaboxes.php:76
+msgid "Calendar Type"
+msgstr ""
+
+#: includes/core/metaboxes.php:110
+msgid "No slots to copy from Monday."
+msgstr ""
+
+#: includes/core/metaboxes.php:111
+msgid "Standard 95 slots added for Monday to Friday."
+msgstr ""
+
+#: includes/core/metaboxes.php:112
+msgid "Invalid JSON"
+msgstr ""
+
+#: includes/core/metaboxes.php:184
 msgid ""
 "Your booking has been received successfully! Our team will soon contact you "
 "with further details. Thank you for choosing us."
 msgstr ""
 
-#: includes/core/metaboxes.php:365
+#: includes/core/metaboxes.php:188
 msgid "Confirmation Message"
 msgstr ""
 
-#: includes/core/metaboxes.php:368
+#: includes/core/metaboxes.php:191
 msgid ""
 "This message will be shown to the user after they confirm their booking."
 msgstr ""
 
-#: includes/core/metaboxes.php:411
+#: includes/core/metaboxes.php:227
 msgid "Show Title"
 msgstr ""
 
-#: includes/core/metaboxes.php:413
+#: includes/core/metaboxes.php:229
 msgid "Toggle to display the calendar title on the frontend."
 msgstr ""
 
-#: includes/core/metaboxes.php:419
+#: includes/core/metaboxes.php:235
 msgid "Allow Guest Bookings"
 msgstr ""
 
-#: includes/core/metaboxes.php:421
+#: includes/core/metaboxes.php:237
 msgid ""
 "Allow users who are not logged in to make bookings with only providing their "
 "email address."
@@ -557,7 +599,7 @@ msgstr ""
 msgid "Parent Booking:"
 msgstr ""
 
-#: includes/emails/basic-emails.php:44 includes/emails/basic-emails.php:111
+#: includes/emails/basic-emails.php:44 includes/emails/basic-emails.php:124
 msgid "Calendar:"
 msgstr ""
 
@@ -581,70 +623,80 @@ msgstr ""
 msgid "Thank you for using our booking service!"
 msgstr ""
 
-#: includes/emails/basic-emails.php:57
+#: includes/emails/basic-emails.php:59
 #, php-format
-msgid "New booking received – %s"
+msgid "New booking received  %1$s"
 msgstr ""
 
-#: includes/emails/basic-emails.php:61
+#: includes/emails/basic-emails.php:64
 msgid "New Booking Created"
 msgstr ""
 
-#: includes/emails/basic-emails.php:71
+#: includes/emails/basic-emails.php:76
 #, php-format
-msgid "Your booking confirmation – %s"
+msgid "Your booking confirmation  %1$s"
 msgstr ""
 
-#: includes/emails/basic-emails.php:75
+#: includes/emails/basic-emails.php:81
 msgid "Your booking has been received!"
 msgstr ""
 
-#: includes/emails/basic-emails.php:103
+#: includes/emails/basic-emails.php:112
 #, php-format
-msgid "Booking #%d status updated to %s"
+msgid "Booking #%1$d status updated to %2$s"
 msgstr ""
 
-#: includes/emails/basic-emails.php:110
+#: includes/emails/basic-emails.php:123
 msgid "Booking Status Updated"
 msgstr ""
 
-#: includes/emails/basic-emails.php:112
+#: includes/emails/basic-emails.php:125
 msgid "Booking ID:"
 msgstr ""
 
-#: includes/emails/basic-emails.php:113
+#: includes/emails/basic-emails.php:126
 msgid "New Status:"
 msgstr ""
 
-#: includes/emails/basic-emails.php:114
+#: includes/emails/basic-emails.php:127
 msgid "Thank you for staying with us!"
 msgstr ""
 
-#: includes/shortcodes/calendars-grid.php:44
+#: includes/shortcodes/calendars-grid.php:56
 msgid "No calendars available at the moment."
 msgstr ""
 
-#: includes/shortcodes/calendars-grid.php:89
+#: includes/shortcodes/calendars-grid.php:100
 msgid "Book Now"
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:65
-#: includes/shortcodes/single-calendar.php:118
-msgid "Loading booking calendar..."
-msgstr ""
-
-#: includes/shortcodes/single-calendar.php:66
-msgid "Failed to load calendar. Please refresh the page."
+#: includes/shortcodes/single-calendar.php:33
+msgid "This calendar is not available."
 msgstr ""
 
 #: includes/shortcodes/single-calendar.php:67
+msgid ""
+"Your booking has been confirmed successfully! Our team will soon contact you "
+"with further details. Thank you for choosing us."
+msgstr ""
+
+#: includes/shortcodes/single-calendar.php:74
+#: includes/shortcodes/single-calendar.php:135
+msgid "Loading booking calendar..."
+msgstr ""
+
+#: includes/shortcodes/single-calendar.php:75
+msgid "Failed to load calendar. Please refresh the page."
+msgstr ""
+
+#: includes/shortcodes/single-calendar.php:76
 msgid "Book this slot"
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:68
+#: includes/shortcodes/single-calendar.php:77
 msgid "No slots available for selected period."
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:93
+#: includes/shortcodes/single-calendar.php:102
 msgid "Back to All Calendars"
 msgstr ""
