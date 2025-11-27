@@ -1,4 +1,3 @@
-
 window.CodoBookings = window.CodoBookings || {};
 
 (function(ns){
@@ -7,7 +6,7 @@ window.CodoBookings = window.CodoBookings || {};
 
     function showConfirmationMessage(containerEl, root) {
         const calendarSettings = window['codobookings_settings_' + root.dataset.calendarId];
-        const msg = calendarSettings?.confirmation_message || 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.';
+        const msg = calendarSettings?.confirmation_message || 'Your booking has been received successfully! Our team will soon contact you with further details. Thank you for choosing us.';
         const overlay = document.createElement('div');
         overlay.className = 'codo-confirm-overlay';
         overlay.style = `
@@ -38,13 +37,34 @@ window.CodoBookings = window.CodoBookings || {};
     }
 
     function reloadCalendar(containerEl){
-        // ✅ Reload the calendar after booking
         const calendarRoot = containerEl.closest('.codo-calendar-wrapper');
         if (calendarRoot && calendarRoot.dataset.calendarId) {
+            // ✅ Trigger before-reload hook
+            if (ns.hooks && ns.hooks.beforeCalendarReload) {
+                ns.hooks.beforeCalendarReload.forEach(callback => {
+                    try {
+                        callback(calendarRoot);
+                    } catch(e) {
+                        console.error('Error in beforeCalendarReload hook:', e);
+                    }
+                });
+            }
+
             ns.api.fetchCalendar(calendarRoot.dataset.calendarId)
                 .then(data => {
                     if (data.recurrence === 'weekly') ns.renderWeeklyCalendar(calendarRoot, data);
                     else ns.renderOneTimeCalendar(calendarRoot, data);
+
+                    // ✅ Trigger after-reload hook
+                    if (ns.hooks && ns.hooks.afterCalendarReload) {
+                        ns.hooks.afterCalendarReload.forEach(callback => {
+                            try {
+                                callback(calendarRoot, data);
+                            } catch(e) {
+                                console.error('Error in afterCalendarReload hook:', e);
+                            }
+                        });
+                    }
                 })
                 .catch(err => console.error('Failed to reload calendar:', err));
         }
@@ -91,12 +111,35 @@ window.CodoBookings = window.CodoBookings || {};
             sidebar._confirmBtn = confirmBtn;
 
             confirmBtn.addEventListener('click', () => {
+                // ✅ NEW: Trigger before-confirm hook (can prevent submission)
+                if (ns.hooks && ns.hooks.beforeConfirmBooking) {
+                    try {
+                        for (let callback of ns.hooks.beforeConfirmBooking) {
+                            // Pass sidebar context for extensions to access
+                            const shouldContinue = callback({
+                                sidebar: sidebar,
+                                container: sidebar.querySelector('.codo-sidebar-container'),
+                                root: root,
+                                calendarId: root.dataset.calendarId
+                            });
+                            // If hook returns false, stop the booking process
+                            if (shouldContinue === false) {
+                                confirmBtn.disabled = false;
+                                return;
+                            }
+                        }
+                    } catch(e) {
+                        console.error('Error in beforeConfirmBooking hook:', e);
+                        confirmBtn.disabled = false;
+                        return;
+                    }
+                }
+
                 confirmBtn.disabled = true;
                 // Check guest booking
                 const containerEl = sidebar.querySelector('.codo-sidebar-container');
                 // dynamically use the per-calendar settings
                 const calendarSettings = window['codobookings_settings_' + root.dataset.calendarId];
-                //console.log(calendarSettings);
                 const allowGuest = calendarSettings?.settings?.allow_guest === 'yes';
                 const userEmail  = calendarSettings?.userEmail || '';
                 const loginUrl   = calendarSettings?.loginUrl || '#';
@@ -108,6 +151,7 @@ window.CodoBookings = window.CodoBookings || {};
                             <a href="${loginUrl}" style="display:inline-block; margin-top:10px; padding:8px 12px; background:#cc0000; color:#fff; border-radius:4px;">Login & Continue</a>
                         </div>
                     `;
+                    confirmBtn.disabled = false;
                     return;
                 }
 
@@ -115,13 +159,16 @@ window.CodoBookings = window.CodoBookings || {};
                 let email = userEmail;
                 if (!email) {
                     email = prompt('Enter your email to confirm booking:');
-                    if (!email) return;
+                    if (!email) {
+                        confirmBtn.disabled = false;
+                        return;
+                    }
                 }
                 const selectedItems = Array.from(containerEl.querySelectorAll('.codo-sidebar-item.selected'));
 
                 const slotsToBook = selectedItems.map(item => {
                     let recurrence_day = '';
-                    if (type === 'weekly') recurrence_day = item.dataset.day; // 'monday', ...
+                    if (type === 'weekly') recurrence_day = item.dataset.day;
                     else {
                         const dateParts = item.dataset.day.split('-');
                         const dt = new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
@@ -137,7 +184,10 @@ window.CodoBookings = window.CodoBookings || {};
                     };
                 });
 
-                if (!slotsToBook.length) return;
+                if (!slotsToBook.length) {
+                    confirmBtn.disabled = false;
+                    return;
+                }
 
                 let successCount = 0; let failedCount = 0;
 
@@ -149,16 +199,70 @@ window.CodoBookings = window.CodoBookings || {};
                         email: email,
                         day: slotData.day
                     })
-                    .then(resp => { if (resp && resp.success) successCount++; else failedCount++; })
-                    .catch(() => { failedCount++; });
+                    .then(resp => { 
+                        if (resp && resp.success) {
+                            successCount++;
+                        } else {
+                            failedCount++;
+                        }
+                        return resp;
+                    })
+                    .catch((err) => { 
+                        failedCount++;
+                        throw err;
+                    });
                 });
 
-                Promise.all(promises).then(() => {
-                    containerEl.innerHTML = '';
-                    confirmBtn.disabled = true;
-                    showConfirmationMessage(containerEl, root);
-                });
+                Promise.all(promises)
+                    .then((results) => {
+                        // ✅ NEW: Trigger after all bookings complete
+                        if (ns.hooks && ns.hooks.afterConfirmBooking) {
+                            ns.hooks.afterConfirmBooking.forEach(callback => {
+                                try {
+                                    callback({
+                                        successCount: successCount,
+                                        failedCount: failedCount,
+                                        results: results,
+                                        sidebar: sidebar,
+                                        root: root
+                                    });
+                                } catch(e) {
+                                    console.error('Error in afterConfirmBooking hook:', e);
+                                }
+                            });
+                        }
+
+                        // Show confirmation only if at least one booking succeeded
+                        if (successCount > 0) {
+                            showConfirmationMessage(containerEl, root);
+                        }
+                        
+                        containerEl.innerHTML = '';
+                        confirmBtn.disabled = true;
+                    })
+                    .catch((err) => {
+                        console.error('Booking error:', err);
+                        confirmBtn.disabled = false;
+                    });
             });
+
+            // ✅ NEW: Trigger after sidebar is created
+            if (ns.hooks && ns.hooks.afterSidebarRender) {
+                ns.hooks.afterSidebarRender.forEach(callback => {
+                    try {
+                        callback({
+                            sidebar: sidebar,
+                            header: header,
+                            container: container,
+                            footer: footer,
+                            confirmBtn: confirmBtn,
+                            root: root
+                        });
+                    } catch(e) {
+                        console.error('Error in afterSidebarRender hook:', e);
+                    }
+                });
+            }
         }
 
         const container = sidebar.querySelector('.codo-sidebar-container');

@@ -181,7 +181,7 @@ add_action( 'codobookings_calendar_settings_after', 'codobookings_add_confirmati
 function codobookings_add_confirmation_message_field( $post ) {
     $message = get_post_meta( $post->ID, '_codo_confirmation_message', true );
     if ( empty( $message ) ) {
-        $message = __( 'Your booking has been confirmed successfully! Our team will soon contact you with further details. Thank you for choosing us.', 'codobookings' );
+        $message = __( 'Your booking has been received successfully! Our team will soon contact you with further details. Thank you for choosing us.', 'codobookings' );
     }
     ?>
     <hr>

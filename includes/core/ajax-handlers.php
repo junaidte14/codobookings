@@ -183,6 +183,8 @@ function codobookings_ajax_create_booking() {
         'meta'        => [],
     ];
 
+    $booking_data = apply_filters( 'codobookings_before_booking_insert', $booking_data );
+    
     // Create booking (existing functionality)
     $booking_id = codobookings_create_booking( $booking_data );
 

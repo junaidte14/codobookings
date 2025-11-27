@@ -351,7 +351,7 @@ msgstr ""
 
 #: includes/core/metaboxes.php:361 includes/shortcodes/single-calendar.php:58
 msgid ""
-"Your booking has been confirmed successfully! Our team will soon contact you "
+"Your booking has been received successfully! Our team will soon contact you "
 "with further details. Thank you for choosing us."
 msgstr ""
 

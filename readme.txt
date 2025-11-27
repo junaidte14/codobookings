@@ -3,7 +3,7 @@ Contributors: junaidte14
 Tags: booking, appointments, calendar, scheduler, wordpress-booking
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,12 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 
 == Changelog ==
 
+= 1.1.0 =
+* New hooks introduced in PHP code
+* Some wording changes
+* Hooks added in JS code for future extensibility
+* Fixed confirmation message visibility
+
 = 1.0.0 =
 * Initial Release with following features
 * Added booking grid and single calendar shortcodes.
@@ -95,6 +101,9 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 ---
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Introduced new PHP/JS hooks, improved wording, and fixed confirmation message visibility.
 
 = 1.0.0 =
 CodoBookings is a complete standalone booking system — no dependencies required. Please update to enjoy the latest stable features.

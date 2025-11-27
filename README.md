@@ -72,15 +72,33 @@ Once activated:
 ---
 
 **Hooks Overview:**
-- `codobookings_admin_overview_stats` – Extend the dashboard widget with custom stats.  
+- `codobookings_admin_overview_stats` – Extend the dashboard widget with custom stats.
+- `codobookings_before_calendar` – [Action Hook] Fires before a calendar is shown.
+- `codobookings_after_calendar` – [Action Hook] Fires after a calendar is shown.
+- `codobookings_before_booking_insert` – [Filter Hook] Fires before a booking is created.  
 - `codobookings_booking_created` – Triggered when a new booking is created.  
 - `codobookings_booking_status_changed` – Fires when a booking status is updated.
 - `codobookings_emails_sent` – Fires when a booking confirmation email is sent.
 - `codobookings_status_email_sent` – Fires when a booking status change email is sent.
 
+**Hooks in JS Code:**
+- `beforeConfirmBooking` – Fires before processing booking request from the user.
+- `afterConfirmBooking` – Fires after processing booking request from the user.
+- `beforeCreateBooking` – Fires before a booking is created.
+- `afterCreateBooking` – Fires after a booking is created.
+- `beforeCalendarReload` – Fires before a calendar is reloaded.
+- `afterCalendarReload` – Fires after a calendar is reloaded.
+- `afterSidebarRender` – Fires after a calendar sidebar (with time slots) is loaded.
+
 ---
 
 ## 📘 Changelog
+
+### 1.1.0 - Features and Improvements
+- New hooks introduced in PHP code
+- Some wording changes
+- Hooks added in JS code for future extensibility
+- Fixed confirmation message visibility
 
 ### 1.0.0 - Initial Release
 - Standalone booking plugin core
@@ -88,7 +106,6 @@ Once activated:
 - Booking list and management UI
 - Recurring booking logic (weekly)
 - Modular architecture for future extensions
-
 
 ---
 

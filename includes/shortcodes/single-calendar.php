@@ -121,11 +121,26 @@ function codobookings_calendar_shortcode( $atts ) {
                 </p>
             <?php endif; ?>
 
+            <?php 
+            /**
+             * Hook: Before Calendar Output
+             * Allows extension plugins to inject User Fields BEFORE the calendar.
+             */
+            do_action( 'codobookings_before_calendar', $calendar_id );
+            ?>
+
             <div id="<?php echo esc_attr($unique_id); ?>" 
                 class="codo-calendar-wrapper" 
                 data-calendar-id="<?php echo esc_attr($calendar_id); ?>">
                 <div class="codo-calendar-loading"><?php echo esc_html__('Loading booking calendar...', 'codobookings'); ?></div>
             </div>
+            <?php 
+            /**
+             * Hook: After Calendar Output
+             * Allows extension plugins to inject User Fields AFTER the calendar.
+             */
+            do_action( 'codobookings_after_calendar', $calendar_id );
+            ?>
         </div>
     </div>
     <?php
