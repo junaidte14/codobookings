@@ -6,11 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 add_action( 'admin_init', 'codobookings_register_general_settings' );
 function codobookings_register_general_settings() {
-    register_setting( 'codobookings_options', 'codobookings_default_meeting_app', [
+    register_setting( 'codobookings_options', 'codobookings_default_booking_status', [
+        'type'              => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default'           => 'pending',
+    ]);
+
+    /* register_setting( 'codobookings_options', 'codobookings_default_meeting_app', [
         'type'              => 'string',
         'sanitize_callback' => 'sanitize_text_field',
         'default'           => 'none',
-    ]);
+    ]); */
 
     do_action( 'codobookings_register_settings' );
 }
@@ -113,7 +119,31 @@ function codobookings_render_general_settings() {
     <table class="form-table">
         <?php
         $fields = [
-            'codobookings_default_meeting_app' => function() {
+            'codobookings_default_booking_status' => function() {
+                $booking_statuses = [
+                    'pending'   => __( 'Pending', 'codobookings' ),
+                    'confirmed' => __( 'Confirmed', 'codobookings' ),
+                    'cancelled' => __( 'Cancelled', 'codobookings' ),
+                    'completed' => __( 'Completed', 'codobookings' ),
+                ];
+                $current = get_option( 'codobookings_default_booking_status', 'pending' );
+                ?>
+                <tr>
+                    <th><?php esc_html_e( 'Default Booking Status', 'codobookings' ); ?></th>
+                    <td>
+                        <select name="codobookings_default_booking_status">
+                            <?php foreach ( $booking_statuses as $key => $label ) : ?>
+                                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $current, $key ); ?>>
+                                    <?php echo esc_html( $label ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <br><small><?php esc_html_e( 'The default status assigned to new bookings.', 'codobookings' ); ?></small>
+                    </td>
+                </tr>
+                <?php
+            },
+            /* 'codobookings_default_meeting_app' => function() {
                 $meeting_apps = apply_filters( 'codobookings_meeting_apps', [
                     'none' => __( 'None', 'codobookings' ),
                 ]);
@@ -133,7 +163,7 @@ function codobookings_render_general_settings() {
                     </td>
                 </tr>
                 <?php
-            },
+            }, */
         ];
 
         $fields = apply_filters( 'codobookings_general_settings_fields', $fields );

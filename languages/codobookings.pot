@@ -270,6 +270,55 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
+#: includes/admin/settings/design.php:31
+msgid "Design"
+msgstr ""
+
+#: includes/admin/settings/design.php:48
+msgid "Primary Color"
+msgstr ""
+
+#: includes/admin/settings/design.php:49
+msgid ""
+"Main brand color for buttons and accents (leave empty to inherit from theme)"
+msgstr ""
+
+#: includes/admin/settings/design.php:57
+msgid "Text Color"
+msgstr ""
+
+#: includes/admin/settings/design.php:58
+msgid "Main text color (leave empty to inherit from theme)"
+msgstr ""
+
+#: includes/admin/settings/design.php:68
+msgid "Border Radius"
+msgstr ""
+
+#: includes/admin/settings/design.php:69
+msgid "Corner roundness for cards and elements in pixels"
+msgstr ""
+
+#: includes/admin/settings/design.php:81
+msgid "Custom CSS"
+msgstr ""
+
+#: includes/admin/settings/design.php:82
+msgid "Add custom CSS to override or extend styles"
+msgstr ""
+
+#: includes/admin/settings/design.php:112
+msgid "Colors"
+msgstr ""
+
+#: includes/admin/settings/design.php:113
+msgid "Layout"
+msgstr ""
+
+#: includes/admin/settings/design.php:114
+msgid "Advanced"
+msgstr ""
+
 #: includes/admin/settings/emails.php:27
 msgid "Emails"
 msgstr ""
@@ -302,29 +351,40 @@ msgid ""
 "booking and upon any status updates."
 msgstr ""
 
-#: includes/admin/settings/general.php:24
+#: includes/admin/settings/general.php:30
 msgid "General"
 msgstr ""
 
-#: includes/admin/settings/general.php:49
+#: includes/admin/settings/general.php:55
 msgid "Settings saved successfully."
 msgstr ""
 
-#: includes/admin/settings/general.php:57
+#: includes/admin/settings/general.php:63
 msgid "CodoBookings Settings"
 msgstr ""
 
-#: includes/admin/settings/general.php:118
-msgid "None"
+#: includes/admin/settings/general.php:124
+msgid "Pending"
 msgstr ""
 
-#: includes/admin/settings/general.php:123
-msgid "Default meeting app"
+#: includes/admin/settings/general.php:125
+msgid "Confirmed"
+msgstr ""
+
+#: includes/admin/settings/general.php:126
+msgid "Cancelled"
+msgstr ""
+
+#: includes/admin/settings/general.php:127
+msgid "Completed"
 msgstr ""
 
 #: includes/admin/settings/general.php:132
-msgid ""
-"Meeting app options can be added through officially supported extensions."
+msgid "Default Booking Status"
+msgstr ""
+
+#: includes/admin/settings/general.php:141
+msgid "The default status assigned to new bookings."
 msgstr ""
 
 #: includes/core/metaboxes.php:11 includes/core/metaboxes.php:203
@@ -662,11 +722,11 @@ msgstr ""
 msgid "Thank you for staying with us!"
 msgstr ""
 
-#: includes/shortcodes/calendars-grid.php:56
+#: includes/shortcodes/calendars-grid.php:73
 msgid "No calendars available at the moment."
 msgstr ""
 
-#: includes/shortcodes/calendars-grid.php:100
+#: includes/shortcodes/calendars-grid.php:154
 msgid "Book Now"
 msgstr ""
 
@@ -680,23 +740,23 @@ msgid ""
 "with further details. Thank you for choosing us."
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:74
-#: includes/shortcodes/single-calendar.php:135
+#: includes/shortcodes/single-calendar.php:82
+#: includes/shortcodes/single-calendar.php:338
 msgid "Loading booking calendar..."
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:75
+#: includes/shortcodes/single-calendar.php:83
 msgid "Failed to load calendar. Please refresh the page."
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:76
+#: includes/shortcodes/single-calendar.php:84
 msgid "Book this slot"
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:77
+#: includes/shortcodes/single-calendar.php:85
 msgid "No slots available for selected period."
 msgstr ""
 
-#: includes/shortcodes/single-calendar.php:102
+#: includes/shortcodes/single-calendar.php:126
 msgid "Back to All Calendars"
 msgstr ""

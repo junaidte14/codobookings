@@ -9,19 +9,69 @@ window.CodoBookings = window.CodoBookings || {};
         const msg = calendarSettings?.confirmation_message || 'Your booking has been received successfully! Our team will soon contact you with further details. Thank you for choosing us.';
         const overlay = document.createElement('div');
         overlay.className = 'codo-confirm-overlay';
-        overlay.style = `
-            position:fixed; top:0; left:0; right:0; bottom:0;
-            background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;
+        
+        // ✅ REMOVED: All inline styles - use CSS variables instead
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         `;
+        
         const box = document.createElement('div');
-        box.style = `
-            background:#fff; padding:20px 30px; border-radius:10px;
-            max-width:400px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        box.className = 'codo-confirm-box';
+        // ✅ REMOVED: Hardcoded colors - now uses CSS class
+        box.style.cssText = `
+            background: var(--codobookings-background-color, #fff);
+            padding: 20px 30px;
+            border-radius: var(--codobookings-border-radius, 10px);
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: var(--codobookings-font-family, inherit);
         `;
-        box.innerHTML = `
-            <p style="font-size:16px;">${msg}</p>
-            <a id="closeConfirmMsg" style="margin-top:15px; padding:8px 16px; background:#0073aa; color:#fff; border:none; border-radius:5px; cursor: pointer;">OK</a>
+        
+        const msgText = document.createElement('p');
+        msgText.style.cssText = `
+            font-size: var(--codobookings-base-font-size, 16px);
+            color: var(--codobookings-text-color, #333);
+            margin: 0 0 15px 0;
         `;
+        msgText.textContent = msg;
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.id = 'closeConfirmMsg';
+        closeBtn.className = 'codo-confirm-close-btn';
+        closeBtn.textContent = 'OK';
+        // ✅ REMOVED: Hardcoded button styles
+        closeBtn.style.cssText = `
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--codobookings-primary-color, #0073aa);
+            color: var(--codobookings-button-text-color, #fff);
+            border: none;
+            border-radius: var(--codobookings-button-border-radius, 5px);
+            cursor: pointer;
+            transition: var(--codobookings-transition, all 0.25s ease);
+            font-family: var(--codobookings-font-family, inherit);
+        `;
+        
+        // Add hover effect via event listeners
+        closeBtn.addEventListener('mouseenter', function() {
+            this.style.background = `var(--codobookings-secondary-color, #005177)`;
+        });
+        closeBtn.addEventListener('mouseleave', function() {
+            this.style.background = `var(--codobookings-primary-color, #0073aa)`;
+        });
+        
+        box.appendChild(msgText);
+        box.appendChild(closeBtn);
         overlay.appendChild(box);
         document.body.appendChild(overlay);
 
@@ -29,7 +79,7 @@ window.CodoBookings = window.CodoBookings || {};
         document.body.style.pointerEvents = 'none';
         box.style.pointerEvents = 'auto';
 
-        document.getElementById('closeConfirmMsg').addEventListener('click', () => {
+        closeBtn.addEventListener('click', () => {
             overlay.remove();
             document.body.style.pointerEvents = 'auto';
             reloadCalendar(containerEl);
@@ -85,7 +135,7 @@ window.CodoBookings = window.CodoBookings || {};
             const header = document.createElement('div');
             header.className = 'codo-sidebar-header';
             header.innerHTML = '<strong>Booking Details</strong><br><small>Select slots and click Confirm Booking</small>';
-            header.style.marginBottom = '10px';
+            // ✅ REMOVED: Hardcoded margin - now in CSS
             sidebar.appendChild(header);
 
             const container = document.createElement('div');
@@ -94,16 +144,12 @@ window.CodoBookings = window.CodoBookings || {};
 
             const footer = document.createElement('div');
             footer.className = 'codo-sidebar-footer';
-            footer.style.marginTop = '10px';
+            // ✅ REMOVED: Hardcoded margin - now in CSS
+            
             const confirmBtn = document.createElement('button');
             confirmBtn.textContent = 'Confirm Booking';
-            confirmBtn.style.width = '100%';
-            confirmBtn.style.padding = '8px';
-            confirmBtn.style.background = '#0073aa';
-            confirmBtn.style.color = '#fff';
-            confirmBtn.style.border = 'none';
-            confirmBtn.style.borderRadius = '4px';
-            confirmBtn.style.cursor = 'pointer';
+            confirmBtn.className = 'codo-confirm-booking-btn';
+            // ✅ REMOVED: All hardcoded button styles - now uses CSS classes/variables
             confirmBtn.disabled = true;
             footer.appendChild(confirmBtn);
             sidebar.appendChild(footer);
@@ -115,14 +161,12 @@ window.CodoBookings = window.CodoBookings || {};
                 if (ns.hooks && ns.hooks.beforeConfirmBooking) {
                     try {
                         for (let callback of ns.hooks.beforeConfirmBooking) {
-                            // Pass sidebar context for extensions to access
                             const shouldContinue = callback({
                                 sidebar: sidebar,
                                 container: sidebar.querySelector('.codo-sidebar-container'),
                                 root: root,
                                 calendarId: root.dataset.calendarId
                             });
-                            // If hook returns false, stop the booking process
                             if (shouldContinue === false) {
                                 confirmBtn.disabled = false;
                                 return;
@@ -136,26 +180,43 @@ window.CodoBookings = window.CodoBookings || {};
                 }
 
                 confirmBtn.disabled = true;
-                // Check guest booking
                 const containerEl = sidebar.querySelector('.codo-sidebar-container');
-                // dynamically use the per-calendar settings
                 const calendarSettings = window['codobookings_settings_' + root.dataset.calendarId];
                 const allowGuest = calendarSettings?.settings?.allow_guest === 'yes';
                 const userEmail  = calendarSettings?.userEmail || '';
                 const loginUrl   = calendarSettings?.loginUrl || '#';
 
                 if (!allowGuest && !userEmail) {
-                    containerEl.innerHTML = `
-                        <div class="codo-booking-message" style="padding:15px; text-align:center; background:#ffe6e6; border:1px solid #cc0000; border-radius:6px;">
-                            <p>You must be logged in to book this calendar.</p>
-                            <a href="${loginUrl}" style="display:inline-block; margin-top:10px; padding:8px 12px; background:#cc0000; color:#fff; border-radius:4px;">Login & Continue</a>
-                        </div>
+                    // ✅ REMOVED: Hardcoded styles - use CSS classes
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'codo-booking-message codo-booking-error';
+                    
+                    const messagePara = document.createElement('p');
+                    messagePara.textContent = 'You must be logged in to book this calendar.';
+                    
+                    const loginLink = document.createElement('a');
+                    loginLink.href = loginUrl;
+                    loginLink.textContent = 'Login & Continue';
+                    loginLink.className = 'codo-login-btn';
+                    loginLink.style.cssText = `
+                        display: inline-block;
+                        margin-top: 10px;
+                        padding: 8px 12px;
+                        background: var(--codobookings-primary-color, #cc0000);
+                        color: var(--codobookings-button-text-color, #fff);
+                        border-radius: var(--codobookings-button-border-radius, 4px);
+                        text-decoration: none;
                     `;
+                    
+                    messageDiv.appendChild(messagePara);
+                    messageDiv.appendChild(loginLink);
+                    containerEl.innerHTML = '';
+                    containerEl.appendChild(messageDiv);
+                    
                     confirmBtn.disabled = false;
                     return;
                 }
 
-                // Guest booking allowed or user logged in
                 let email = userEmail;
                 if (!email) {
                     email = prompt('Enter your email to confirm booking:');
@@ -164,6 +225,7 @@ window.CodoBookings = window.CodoBookings || {};
                         return;
                     }
                 }
+                
                 const selectedItems = Array.from(containerEl.querySelectorAll('.codo-sidebar-item.selected'));
 
                 const slotsToBook = selectedItems.map(item => {
@@ -189,7 +251,8 @@ window.CodoBookings = window.CodoBookings || {};
                     return;
                 }
 
-                let successCount = 0; let failedCount = 0;
+                let successCount = 0; 
+                let failedCount = 0;
 
                 const promises = slotsToBook.map(slotData => {
                     return api.createBooking({
@@ -215,7 +278,7 @@ window.CodoBookings = window.CodoBookings || {};
 
                 Promise.all(promises)
                     .then((results) => {
-                        // ✅ NEW: Trigger after all bookings complete
+                        // ✅ Trigger after all bookings complete
                         if (ns.hooks && ns.hooks.afterConfirmBooking) {
                             ns.hooks.afterConfirmBooking.forEach(callback => {
                                 try {
@@ -232,7 +295,6 @@ window.CodoBookings = window.CodoBookings || {};
                             });
                         }
 
-                        // Show confirmation only if at least one booking succeeded
                         if (successCount > 0) {
                             showConfirmationMessage(containerEl, root);
                         }
@@ -246,7 +308,7 @@ window.CodoBookings = window.CodoBookings || {};
                     });
             });
 
-            // ✅ NEW: Trigger after sidebar is created
+            // ✅ Trigger after sidebar is created
             if (ns.hooks && ns.hooks.afterSidebarRender) {
                 ns.hooks.afterSidebarRender.forEach(callback => {
                     try {
@@ -291,7 +353,11 @@ window.CodoBookings = window.CodoBookings || {};
             item.dataset.calendarId = root.dataset.calendarId;
             item.dataset.slotKey = slotKey;
 
-            item.innerHTML = `\n                <strong>${type === 'weekly' ? 'Every ' + label : label}</strong><br>\n                ${slot.start}-${slot.end} UTC / ${localStart}-${localEnd} Local\n                <button class="remove-slot" style="display:none;">Remove</button>\n            `;
+            item.innerHTML = `
+                <strong>${type === 'weekly' ? 'Every ' + label : label}</strong><br>
+                ${slot.start}-${slot.end} UTC / ${localStart}-${localEnd} Local
+                <button class="remove-slot" style="display:none;">Remove</button>
+            `;
 
             const removeBtn = item.querySelector('.remove-slot');
 

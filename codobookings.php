@@ -3,7 +3,7 @@
 * Plugin Name: CodoBookings
 * Plugin URI: https://wpdemo.codoplex.com/codobookings/
 * Description: A Lightweight WordPress Booking & Appointment Plugin.
-* Version: 1.2.0
+* Version: 1.3.0
 * Author: CODOPLEX
 * Author URI: https://codoplex.com/
 * License: GPLv2 or later
@@ -15,7 +15,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Constants
-define( 'CODOBOOKINGS_VERSION', '1.2.0' );
+define( 'CODOBOOKINGS_VERSION', '1.3.0' );
 define( 'CODOBOOKINGS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CODOBOOKINGS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -33,6 +33,7 @@ require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/core/ajax-handlers.php';
 // Settings
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/settings/general.php';
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/settings/emails.php';
+require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/settings/design.php';
 
 // Dashboard
 require_once CODOBOOKINGS_PLUGIN_DIR . 'includes/admin/dashboard.php';

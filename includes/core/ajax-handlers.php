@@ -170,6 +170,15 @@ function codobookings_ajax_create_booking() {
         wp_send_json_error( 'Invalid date/time format. Use UTC format: YYYY-MM-DD HH:MM:SS' );
     }
 
+    // Get default booking status from settings, fallback to 'pending'
+    $default_status = get_option( 'codobookings_default_booking_status', 'pending' );
+    
+    // Validate status is one of the allowed values
+    $allowed_statuses = [ 'pending', 'confirmed', 'cancelled', 'completed' ];
+    if ( ! in_array( $default_status, $allowed_statuses, true ) ) {
+        $default_status = 'pending';
+    }
+
     // Build booking data array
     $booking_data = [
         'title'       => sprintf( 'Booking - %s', $email ),
@@ -178,7 +187,7 @@ function codobookings_ajax_create_booking() {
         'end'         => $end_dt ? $end_dt->format('Y-m-d H:i:s') : '',
         'recurrence'  => sanitize_text_field( $recurrence ),
         'day'         => sanitize_text_field( $day ),
-        'status'      => 'pending',
+        'status'      => $default_status,
         'email'       => $email,
         'meta'        => [],
     ];

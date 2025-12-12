@@ -1,58 +1,100 @@
-/* General Tables */
-.codo-calendar-container{
+/**
+ * CodoBookings - Calendar Frontend Styles
+ * Uses CSS variables for theming - DO NOT hardcode colors/sizes
+ */
+
+/* ===================================
+   General Layout
+   =================================== */
+
+.codo-calendar-container {
     margin-top: 20px;
-}
-.codo-weekly-calendar, .codo-onetime-calendar {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 15px;
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
 }
 
 .codo-back-btn {
     display: inline-block;
     margin-bottom: 20px;
     font-weight: 500;
+    padding: 8px 16px;
+    background-color: var(--codobookings-primary-color, #0073aa);
+    color: var(--codobookings-button-text-color, #fff);
+    border: none;
+    border-radius: var(--codobookings-button-border-radius, 4px);
+    text-decoration: none;
+    transition: var(--codobookings-transition, all 0.25s ease);
+    cursor: pointer;
+    font-family: var(--codobookings-font-family, inherit);
 }
+
+.codo-back-btn:hover {
+    background-color: var(--codobookings-secondary-color, #005177);
+    color: var(--codobookings-button-text-color, #fff);
+}
+
+/* ===================================
+   Featured Image
+   =================================== */
+
 .codo-calendar-featured {
     text-align: center;
     margin-bottom: 15px;
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9; /* keeps professional widescreen look */
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+    border-radius: var(--codobookings-border-radius, 10px) var(--codobookings-border-radius, 10px) 0 0;
 }
+
 .codo-calendar-featured img {
-    border-radius: 10px 10px 0 0;
+    border-radius: var(--codobookings-border-radius, 10px) var(--codobookings-border-radius, 10px) 0 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center; /* centers image focus */
+    object-position: center;
     display: block;
-    transition: transform 0.3s ease;
+    transition: var(--codobookings-transition, transform 0.3s ease);
 }
-.codo-weekly-calendar th, .codo-weekly-calendar td,
-.codo-onetime-calendar th, .codo-onetime-calendar td {
-    border: 1px solid #e0e0e0;
+
+.codo-calendar-featured:hover img {
+    transform: scale(1.05);
+}
+
+/* ===================================
+   Calendar Tables
+   =================================== */
+
+.codo-weekly-calendar,
+.codo-onetime-calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-family: var(--codobookings-font-family, 'Arial', sans-serif);
+    font-size: var(--codobookings-base-font-size, 14px);
+}
+
+.codo-weekly-calendar th,
+.codo-weekly-calendar td,
+.codo-onetime-calendar th,
+.codo-onetime-calendar td {
+    border: 1px solid var(--codobookings-border-color, #e0e0e0);
     text-align: center;
     padding: 8px;
 }
 
 /* One-time calendar cells */
 .codo-onetime-calendar td.available {
-    background: #e6f4ff;
+    background: var(--codobookings-primary-color-light, #e6f4ff);
     cursor: pointer;
     position: relative;
-    transition: background 0.2s;
+    transition: var(--codobookings-transition, background 0.2s);
 }
 
 .codo-onetime-calendar td.codo-active {
-    background: #cce6ff;
+    background: var(--codobookings-primary-color-lighter, #cce6ff);
 }
 
 .codo-onetime-calendar td.available:hover {
-    background: #cce6ff;
+    background: var(--codobookings-primary-color-lighter, #cce6ff);
 }
 
 .codo-onetime-calendar td.past {
@@ -60,25 +102,32 @@
     color: #999;
 }
 
-/* Weekly calendar slots */
+/* ===================================
+   Weekly Calendar Slots
+   =================================== */
+
 .codo-slot {
     position: relative;
-    background: #0073aa;
-    color: #fff;
+    background: var(--codobookings-primary-color, #0073aa);
+    color: var(--codobookings-button-text-color, #fff);
     border: none;
-    border-radius: 5px;
+    border-radius: calc(var(--codobookings-border-radius, 8px) / 2);
     padding: 6px 10px;
     margin: 3px 0;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: var(--codobookings-transition, background 0.2s);
 }
 
 .codo-slot:hover {
-    background: #005f8d;
+    background: var(--codobookings-secondary-color, #005f8d);
 }
 
-/* Tooltip */
-.codo-slot-tooltip, .codo-calendar-tooltip {
+/* ===================================
+   Tooltips
+   =================================== */
+
+.codo-slot-tooltip,
+.codo-calendar-tooltip {
     position: absolute;
     top: -55px;
     left: 50%;
@@ -86,7 +135,7 @@
     background: rgba(0, 0, 0, 0.85);
     color: #fff;
     padding: 6px 10px;
-    border-radius: 6px;
+    border-radius: calc(var(--codobookings-border-radius, 8px) / 2);
     font-size: 12px;
     line-height: 1.4;
     white-space: nowrap;
@@ -102,7 +151,10 @@
     transform: translateX(-50%) translateY(-5px);
 }
 
-/* Calendar header with month navigation */
+/* ===================================
+   Calendar Header (Month Navigation)
+   =================================== */
+
 .codo-calendar-header {
     display: flex;
     justify-content: space-between;
@@ -112,11 +164,12 @@
 
 .codo-calendar-header button {
     padding: 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
+    border-radius: var(--codobookings-button-border-radius, 4px);
+    border: 1px solid var(--codobookings-border-color, #ccc);
+    background: var(--codobookings-background-color, #f5f5f5);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: var(--codobookings-transition, background 0.2s);
+    font-family: var(--codobookings-font-family, inherit);
 }
 
 .codo-calendar-header button:hover {
@@ -126,24 +179,25 @@
 .codo-calendar-header span {
     font-weight: bold;
     font-size: 15px;
+    color: var(--codobookings-heading-color, #1a1a1a);
+    font-family: var(--codobookings-font-family, inherit);
 }
 
-/* Sidebar below calendar */
+/* ===================================
+   Sidebar (REMOVED hardcoded styles - now uses variables)
+   =================================== */
+
 .codo-calendar-sidebar {
-    position: relative;           /* relative to calendar */
-    width: 96%;                  /* full width under calendar */
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    position: relative;
+    width: 96%;
+    background: var(--codobookings-background-color, #fff);
+    border: 1px solid var(--codobookings-border-color, #ddd);
+    border-radius: var(--codobookings-border-radius, 8px);
     padding: 12px;
-    margin-top: 15px;             /* space below calendar */
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* subtle shadow for separation */
-}
-
-/* Slide-in animation */
-.codo-calendar-sidebar {
+    margin-top: 15px;
+    font-family: var(--codobookings-font-family, 'Arial', sans-serif);
+    font-size: var(--codobookings-base-font-size, 14px);
+    box-shadow: var(--codobookings-box-shadow, 0 4px 10px rgba(0,0,0,0.05));
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -154,15 +208,25 @@
     transform: translateY(0);
 }
 
-/* Sidebar items */
+.codo-sidebar-header {
+    margin-bottom: 10px;
+    color: var(--codobookings-text-color, #333);
+}
+
+.codo-sidebar-container {
+    /* Container styles - no hardcoded values */
+}
+
 .codo-sidebar-item {
-    background: #fdfdfd;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
+    background: var(--codobookings-background-color, #fdfdfd);
+    border: 1px solid var(--codobookings-border-color, #e0e0e0);
+    border-radius: calc(var(--codobookings-border-radius, 8px) / 1.5);
     padding: 10px;
     margin-bottom: 8px;
     position: relative;
-    transition: background 0.2s, box-shadow 0.2s;
+    transition: var(--codobookings-transition, all 0.2s);
+    cursor: pointer;
+    color: var(--codobookings-text-color, #333);
 }
 
 .codo-sidebar-item:hover {
@@ -172,11 +236,9 @@
 
 .codo-sidebar-item.selected {
     background: #e0f7ff;
-    border-color: #0073aa;
+    border-color: var(--codobookings-primary-color, #0073aa);
 }
 
-
-/* Remove button in sidebar */
 .codo-sidebar-item button.remove-slot {
     position: absolute;
     top: 4px;
@@ -185,34 +247,54 @@
     color: #fff;
     border: none;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: calc(var(--codobookings-button-border-radius, 4px) / 1.5);
     cursor: pointer;
+    font-size: 11px;
 }
 
-/* Footer confirm button */
+.codo-sidebar-footer {
+    margin-top: 10px;
+}
+
+.codo-sidebar-footer button {
+    width: 100%;
+    padding: 8px;
+    background: var(--codobookings-primary-color, #0073aa);
+    color: var(--codobookings-button-text-color, #fff);
+    border: none;
+    border-radius: var(--codobookings-button-border-radius, 4px);
+    cursor: pointer;
+    font-family: var(--codobookings-font-family, inherit);
+    font-size: var(--codobookings-base-font-size, 14px);
+    transition: var(--codobookings-transition, all 0.2s);
+}
+
 .codo-sidebar-footer button:disabled {
     background: #ccc;
     color: #666;
     cursor: not-allowed;
     opacity: 0.7;
     pointer-events: none;
-    transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
 
 .codo-sidebar-footer button:not(:disabled):hover {
-    background: #005f8d;
+    background: var(--codobookings-secondary-color, #005f8d);
 }
 
-/* Booking confirmation/error message box inside sidebar */
+/* ===================================
+   Booking Messages
+   =================================== */
+
 .codo-booking-message {
     padding: 15px;
     text-align: center;
-    background: #e6f4ff;          /* light blue background */
-    border: 1px solid #0073aa;    /* primary blue border */
-    border-radius: 6px;
-    font-size: 14px;
-    color: #0073aa;
+    background: var(--codobookings-primary-color-light, #e6f4ff);
+    border: 1px solid var(--codobookings-primary-color, #0073aa);
+    border-radius: var(--codobookings-border-radius, 6px);
+    font-size: var(--codobookings-base-font-size, 14px);
+    color: var(--codobookings-text-color, #0073aa);
     margin-bottom: 10px;
+    font-family: var(--codobookings-font-family, inherit);
 }
 
 .codo-booking-message p {
@@ -222,28 +304,34 @@
 
 .codo-booking-message button {
     padding: 8px 12px;
-    background: #0073aa;
-    color: #fff;
+    background: var(--codobookings-primary-color, #0073aa);
+    color: var(--codobookings-button-text-color, #fff);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--codobookings-button-border-radius, 4px);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: var(--codobookings-transition, background 0.2s);
 }
 
 .codo-booking-message button:hover {
-    background: #005f8d;
+    background: var(--codobookings-secondary-color, #005f8d);
 }
+
+/* ===================================
+   Responsive Design
+   =================================== */
 
 @media (max-width: 1024px) {
     .codo-calendar-sidebar {
-        width: 100%;              /* full width for tablets */
+        width: 100%;
         padding: 10px;
         margin-top: 12px;
     }
+    
     .codo-sidebar-item {
         font-size: 13px;
         padding: 8px;
     }
+    
     .codo-sidebar-footer button {
         font-size: 14px;
         padding: 10px;
@@ -252,16 +340,48 @@
 
 @media (max-width: 768px) {
     .codo-calendar-sidebar {
-        width: 100%;              /* full width for mobile */
+        width: 100%;
         padding: 8px;
         margin-top: 10px;
     }
+    
     .codo-sidebar-item {
         font-size: 12px;
         padding: 6px;
     }
+    
     .codo-sidebar-footer button {
         font-size: 14px;
         padding: 8px;
+    }
+    
+    .codo-weekly-calendar,
+    .codo-onetime-calendar {
+        font-size: 12px;
+    }
+    
+    .codo-weekly-calendar th,
+    .codo-weekly-calendar td,
+    .codo-onetime-calendar th,
+    .codo-onetime-calendar td {
+        padding: 6px 4px;
+    }
+}
+
+/* ===================================
+   Accessibility & Motion
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .codo-calendar-sidebar,
+    .codo-sidebar-item,
+    .codo-slot,
+    .codo-onetime-calendar td.available,
+    .codo-calendar-featured img {
+        transition: none;
+    }
+    
+    .codo-calendar-featured:hover img {
+        transform: none;
     }
 }

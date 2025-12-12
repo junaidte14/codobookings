@@ -3,7 +3,7 @@
 **Contributors:** junaidte14  
 **Tags:** bookings, appointments, calendar, scheduling, standalone, pmpro-extension, woocommerce, google-calendar  
 **Requires at least:** 6.0  
-**Tested up to:** 6.7  
+**Tested up to:** 6.9  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
@@ -13,7 +13,6 @@
 ## 🎯 Description
 
 **CodoBookings** is a lightweight yet powerful **WordPress booking management plugin** designed for developers and site owners who want complete flexibility.  
-Originally built as a Paid Memberships Pro (PMPro) extension, it has now evolved into a **standalone booking engine**, providing the foundation for managing appointments, schedules, and customer interactions — **without requiring any dependencies**.
 
 Future extensions (coming soon) will seamlessly integrate with:
 - 🧩 **Paid Memberships Pro** (membership-based bookings)
@@ -72,27 +71,43 @@ Once activated:
 ---
 
 **Hooks Overview:**
-- `codobookings_admin_overview_stats` – Extend the dashboard widget with custom stats.
-- `codobookings_before_calendar` – [Action Hook] Fires before a calendar is shown.
-- `codobookings_after_calendar` – [Action Hook] Fires after a calendar is shown.
-- `codobookings_before_booking_insert` – [Filter Hook] Fires before a booking is created.  
-- `codobookings_booking_created` – Triggered when a new booking is created.  
-- `codobookings_booking_status_changed` – Fires when a booking status is updated.
-- `codobookings_emails_sent` – Fires when a booking confirmation email is sent.
-- `codobookings_status_email_sent` – Fires when a booking status change email is sent.
 
-**Hooks in JS Code:**
-- `beforeConfirmBooking` – Fires before processing booking request from the user.
-- `afterConfirmBooking` – Fires after processing booking request from the user.
-- `beforeCreateBooking` – Fires before a booking is created.
-- `afterCreateBooking` – Fires after a booking is created.
-- `beforeCalendarReload` – Fires before a calendar is reloaded.
-- `afterCalendarReload` – Fires after a calendar is reloaded.
-- `afterSidebarRender` – Fires after a calendar sidebar (with time slots) is loaded.
+CodoBookings provides 40+ action hooks and filter hooks that allow developers to extend and customize the booking system without modifying core plugin files. These hooks enable you to add custom functionality, integrate with third-party services, modify the booking workflow, customize design settings, and enhance the user experience.
+
+Common use cases include:
+- Adding custom validation to booking forms
+- Integrating with CRM systems and marketing tools
+- Customizing email notifications and workflows
+- Modifying calendar display and grid layouts
+- Extending design customization options
+- Implementing custom analytics tracking
+- Adding promotional content and badges
+
+**Developer Reference Guide:** [CodoBookings Hooks and Filters - Complete Developer Guide](https://wpdemo.codoplex.com/codobookings/codobookings-hooks-and-filters-complete-developer-guide-2026/)
+
+The reference guide includes detailed explanations and working code examples for every hook, organized by functionality: dashboard hooks, calendar display hooks, booking process hooks, design customization hooks, styling hooks, and JavaScript hooks.
 
 ---
 
 ## 📘 Changelog
+
+### 1.3.0 - Features and Improvements
+- NEW: Design Customization System - Customize your booking calendars to match your brand
+- NEW: Theme Color Inheritance - Automatically detects and uses your WordPress theme colors
+- NEW: Basic Design Settings - Control primary color, text color, and border radius
+- NEW: Custom CSS Field - Add your own CSS for advanced customization
+- NEW: CSS Variables Architecture - All styles use CSS custom properties for easy theming
+- NEW: 15+ Extension Hooks - Extensive filter and action hooks for developers
+- NEW: New Setting - Define default booking status
+- IMPROVED: Frontend Styling - Removed all hardcoded colors and sizes
+- IMPROVED: Sidebar Rendering - Dynamic styles now use CSS variables
+- IMPROVED: Theme Integration - Better compatibility with any WordPress theme
+- IMPROVED: Performance - Optimized CSS generation with intelligent caching
+- IMPROVED: Extensibility - Clean separation for premium extensions
+- FIXED: Hardcoded styles in JavaScript sidebar rendering
+- FIXED: Calendar grid responsive behavior on mobile devices
+- DEVELOPER: New design-focused hooks and filters for extensions
+- DEVELOPER: Smart auto-color generation (secondary from primary, heading from text)
 
 ### 1.2.0 - Features and Improvements
 - Added User Fields Extension link on dashboard page

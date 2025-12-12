@@ -2,8 +2,8 @@
 Contributors: junaidte14
 Tags: booking, appointments, calendar, scheduler, wordpress-booking
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 1.2.0
+Tested up to: 6.9
+Stable tag: 1.3.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,15 +17,16 @@ Whether you're a coach, consultant, tutor, or agency, CodoBookings helps you man
 
 **🎯 Key Features**
 
-* 🔁 **Flexible Booking Types** – Supports both one-time and weekly recurring appointments.
-* 👥 **Guest Bookings** – Customers can book appointments without creating an account by just providing their email address.
-* 💬 **Email Notifications** – Automatic HTML email confirmations and status update notifications for you and your clients.
-* 🧱 **Shortcodes for Easy Embedding** – Display booking calendars or grids anywhere using simple shortcodes.
-* 🧭 **Admin Dashboard Widget** – See your key booking stats right on the WordPress dashboard.
-* 🎨 **Clean Front-End Interface** – Modern, minimal design that adapts to any WordPress theme.
-* 🌍 **Translation Ready** – Includes `.pot` file for localization with tools like Poedit.
-* 🧩 **Extensible Architecture** – Modular structure ready for integrations and add-ons.
-* 🔒 **Secure & Optimized** – Sanitized inputs, escaped outputs, and lightweight queries.
+* **Flexible Booking Types** – Supports both one-time and weekly recurring appointments.
+* **Design System** - A powerful design system to customize colors, layout and custom CSS.
+* **Guest Bookings** – Customers can book appointments without creating an account by just providing their email address.
+* **Email Notifications** – Automatic HTML email confirmations and status update notifications for you and your clients.
+* **Shortcodes for Easy Embedding** – Display booking calendars or grids anywhere using simple shortcodes.
+* **Admin Dashboard Widget** – See your key booking stats right on the WordPress dashboard.
+* **Clean Front-End Interface** – Modern, minimal design that adapts to any WordPress theme.
+* **Translation Ready** – Includes `.pot` file for localization with tools like Poedit.
+* **Extensible Architecture** – Modular structure ready for integrations and add-ons.
+* **Secure & Optimized** – Sanitized inputs, escaped outputs, and lightweight queries.
 
 CodoBookings provides a full, professional booking system built natively for WordPress — without bloat or dependency chains.
 
@@ -82,6 +83,24 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 
 == Changelog ==
 
+= 1.3.0 =
+* NEW: Design Customization System - Customize your booking calendars to match your brand
+* NEW: Theme Color Inheritance - Automatically detects and uses your WordPress theme colors
+* NEW: Basic Design Settings - Control primary color, text color, and border radius
+* NEW: Custom CSS Field - Add your own CSS for advanced customization
+* NEW: CSS Variables Architecture - All styles use CSS custom properties for easy theming
+* NEW: 15+ Extension Hooks - Extensive filter and action hooks for developers
+* NEW: New Setting - Define default booking status
+* IMPROVED: Frontend Styling - Removed all hardcoded colors and sizes
+* IMPROVED: Sidebar Rendering - Dynamic styles now use CSS variables
+* IMPROVED: Theme Integration - Better compatibility with any WordPress theme
+* IMPROVED: Performance - Optimized CSS generation with intelligent caching
+* IMPROVED: Extensibility - Clean separation for premium extensions
+* FIXED: Hardcoded styles in JavaScript sidebar rendering
+* FIXED: Calendar grid responsive behavior on mobile devices
+* DEVELOPER: New design-focused hooks and filters for extensions
+* DEVELOPER: Smart auto-color generation (secondary from primary, heading from text)
+
 = 1.2.0 =
 * Added User Fields Extension link on dashboard page
 * Updated the translations file
@@ -119,13 +138,20 @@ CodoBookings is a complete standalone booking system — no dependencies require
 
 == Developer Hooks & Filters ==
 
-CodoBookings offers several hooks to extend functionality:
+CodoBookings provides 40+ action hooks and filter hooks that allow developers to extend and customize the booking system without modifying core plugin files. These hooks enable you to add custom functionality, integrate with third-party services, modify the booking workflow, customize design settings, and enhance the user experience.
 
-* `codobookings_admin_overview_stats` – Extend the dashboard widget with custom stats.
-* `codobookings_booking_created` – Triggered when a new booking is created.
-* `codobookings_booking_status_changed` – Fires when a booking’s status is updated.
-* `codobookings_emails_sent` – Fires when a confirmation email is sent.
-* `codobookings_status_email_sent` – Fires when a status update email is sent.
+Common use cases include:
+* Adding custom validation to booking forms
+* Integrating with CRM systems and marketing tools
+* Customizing email notifications and workflows
+* Modifying calendar display and grid layouts
+* Extending design customization options
+* Implementing custom analytics tracking
+* Adding promotional content and badges
+
+**Developer Reference Guide:** [CodoBookings Hooks and Filters - Complete Developer Guide](https://wpdemo.codoplex.com/codobookings/codobookings-hooks-and-filters-complete-developer-guide-2026/)
+
+The reference guide includes detailed explanations and working code examples for every hook, organized by functionality: dashboard hooks, calendar display hooks, booking process hooks, design customization hooks, styling hooks, and JavaScript hooks.
 
 ---
 

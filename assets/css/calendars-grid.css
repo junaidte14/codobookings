@@ -1,59 +1,122 @@
+/**
+ * CodoBookings - Calendars Grid
+ * Uses CSS variables for theming - DO NOT hardcode colors/sizes
+ */
+
 .codo-calendars-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
-    align-items: stretch;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(var(--codo-grid-columns), 1fr);
+    gap: var(--codobookings-card-spacing, 25px);
+    align-items: start;
     margin: 40px 0;
 }
+
 .codo-calendar-item {
-    flex: 1 1 calc(100% / var(--codo-grid-columns) - 25px);
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid #e3e3e3;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    padding: 10px;
+    background: var(--codobookings-background-color, #fff);
+    border-radius: var(--codobookings-border-radius, 14px);
+    border: 1px solid var(--codobookings-border-color, #e3e3e3);
+    box-shadow: var(--codobookings-box-shadow, 0 2px 8px rgba(0,0,0,0.05));
+    padding: var(--codobookings-card-padding, 10px);
     text-align: center;
-    transition: all 0.25s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* ✅ allow content to stack naturally */
-    height: auto; /* ✅ ensures card fits content */
+    transition: var(--codobookings-transition, all 0.25s ease);
+    height: auto;
 }
+
 .codo-calendar-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
+
 .codo-calendar-item:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    box-shadow: var(--codobookings-box-shadow-hover, 0 6px 16px rgba(0,0,0,0.08));
 }
+
 .codo-calendar-thumb-wrap {
-    margin: -10px -10px 0 -10px; /* cancel out card padding */
+    margin: calc(var(--codobookings-card-padding, 10px) * -1) calc(var(--codobookings-card-padding, 10px) * -1) 0 calc(var(--codobookings-card-padding, 10px) * -1);
     overflow: hidden;
+    border-radius: calc(var(--codobookings-border-radius, 14px) - 2px) calc(var(--codobookings-border-radius, 14px) - 2px) 0 0;
 }
+
 .codo-calendar-thumb {
     width: 100%;
     height: auto;
-    border-radius: 10px 10px 0 0;
+    border-radius: calc(var(--codobookings-border-radius, 10px) - 4px) calc(var(--codobookings-border-radius, 10px) - 4px) 0 0;
     object-fit: cover;
+    transition: var(--codobookings-transition, all 0.25s ease);
 }
+
+.codo-calendar-thumb-wrap:hover .codo-calendar-thumb {
+    transform: scale(1.05);
+}
+
 .codo-calendar-title {
-    margin-bottom: 10px;
+    margin: 15px 0 10px 0;
+    color: var(--codobookings-heading-color, #1a1a1a);
+    font-size: var(--codobookings-heading-font-size, 18px);
+    font-family: var(--codobookings-font-family, inherit);
+    font-weight: 600;
+    line-height: 1.3;
 }
+
 .codo-calendar-desc {
     margin-bottom: 20px;
+    color: var(--codobookings-text-color, #555);
+    font-size: var(--codobookings-base-font-size, 14px);
+    font-family: var(--codobookings-font-family, inherit);
+    line-height: 1.6;
 }
+
 .codo-book-btn {
     display: inline-block;
     font-weight: 500;
+    padding: 10px 20px;
+    background-color: var(--codobookings-primary-color, #0073aa);
+    color: var(--codobookings-button-text-color, #fff);
+    border: none;
+    border-radius: var(--codobookings-button-border-radius, 4px);
+    text-decoration: none;
+    transition: var(--codobookings-transition, all 0.25s ease);
+    cursor: pointer;
+    font-family: var(--codobookings-font-family, inherit);
+    font-size: var(--codobookings-base-font-size, 14px);
 }
+
+.codo-book-btn:hover {
+    background-color: var(--codobookings-secondary-color, #005177);
+    color: var(--codobookings-button-text-color, #fff);
+    transform: translateY(-1px);
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
-    .codo-calendar-item { flex: 1 1 calc(50% - 25px); }
+    .codo-calendar-item { 
+        flex: 1 1 calc(50% - var(--codobookings-card-spacing, 25px)); 
+    }
 }
+
 @media (max-width: 640px) {
-    .codo-calendar-item { flex: 1 1 100%; }
+    .codo-calendar-item { 
+        flex: 1 1 100%; 
+    }
+    
+    .codo-calendars-grid {
+        gap: calc(var(--codobookings-card-spacing, 25px) * 0.8);
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .codo-calendar-item,
+    .codo-calendar-thumb,
+    .codo-book-btn {
+        transition: none;
+    }
+    
+    .codo-calendar-item:hover,
+    .codo-book-btn:hover {
+        transform: none;
+    }
 }

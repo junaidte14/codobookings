@@ -30,35 +30,3 @@ window.CodoBookings = window.CodoBookings || {};
 
     ns.utils = utils;
 })(window.CodoBookings);
-
-
-
-
-
-
-
-
-// =========================
-// File: js/main.js
-// =========================
-
-
-
-// =========================
-// Optional: PHP enqueue snippet included below this JS bundle in the same file for convenience.
-// Add this to your plugin/theme to enqueue the modular scripts in proper order.
-
-/*
-php enqueue example:
-
-function codo_enqueue_scripts(){
-    $base = plugin_dir_url(__FILE__) . 'js/';
-    wp_enqueue_script('codo-utils', $base . 'utils.js', [], '1.0', true);
-    wp_enqueue_script('codo-api', $base . 'api.js', ['codo-utils'], '1.0', true);
-    wp_enqueue_script('codo-sidebar', $base . 'sidebar.js', ['codo-utils','codo-api'], '1.0', true);
-    wp_enqueue_script('codo-weekly', $base . 'calendar-weekly.js', ['codo-sidebar'], '1.0', true);
-    wp_enqueue_script('codo-onetime', $base . 'calendar-onetime.js', ['codo-sidebar'], '1.0', true);
-    wp_enqueue_script('codo-main', $base . 'main.js', ['codo-weekly','codo-onetime'], '1.0', true);
-}
-add_action('wp_enqueue_scripts','codo_enqueue_scripts');
-*/
