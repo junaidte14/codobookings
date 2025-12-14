@@ -3,7 +3,7 @@ Contributors: junaidte14
 Tags: booking, appointments, calendar, scheduler, wordpress-booking
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.0
+Stable tag: 1.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -18,10 +18,11 @@ Whether you're a coach, consultant, tutor, or agency, CodoBookings helps you man
 **🎯 Key Features**
 
 * **Flexible Booking Types** – Supports both one-time and weekly recurring appointments.
-* **Design System** - A powerful design system to customize colors, layout and custom CSS.
 * **Guest Bookings** – Customers can book appointments without creating an account by just providing their email address.
 * **Email Notifications** – Automatic HTML email confirmations and status update notifications for you and your clients.
 * **Shortcodes for Easy Embedding** – Display booking calendars or grids anywhere using simple shortcodes.
+* **Design System** - A powerful design system to customize colors, layout and custom CSS.
+* **User Fields** – A drag & drop enabled dynamic User Fields system to collect custom user data associated to a booking.
 * **Admin Dashboard Widget** – See your key booking stats right on the WordPress dashboard.
 * **Clean Front-End Interface** – Modern, minimal design that adapts to any WordPress theme.
 * **Translation Ready** – Includes `.pot` file for localization with tools like Poedit.
@@ -83,6 +84,17 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 
 == Changelog ==
 
+= 1.4.1 =
+* FIXED: Issues with design system is fixed.
+
+= 1.4.0 =
+* NEW: A drag & drop enabled dynamic User Fields system to collect custom user data associated to a booking.
+* NEW: Ability to define/use global user fields, calendar specific fields or no user fields at all.
+* NEW: Show user fields before or after the main booking calendar.
+* NEW: Ability to define required or optional user fields.
+* NEW: Supported input field types include text, textarea, number, select, radio, and checkbox.
+* NEW: Frontend and backend validation for user field type, data and values.
+
 = 1.3.0 =
 * NEW: Design Customization System - Customize your booking calendars to match your brand
 * NEW: Theme Color Inheritance - Automatically detects and uses your WordPress theme colors
@@ -125,8 +137,17 @@ Not yet, but upcoming extensions will integrate with WooCommerce and Paid Member
 
 == Upgrade Notice ==
 
+= 1.4.1 =
+Fixed an issue with the design system loading.
+
+= 1.4.0 =
+Added a drag & drop enabled dynamic User Fields system to collect custom user data associated to a booking.
+
+= 1.3.0 =
+Added a powerful design system to customize colors, layout and custom CSS.
+
 = 1.2.0 =
-Added user fields extension link on dashboard page and updated the translations file
+Added user fields extension link on dashboard page and updated the translations file.
 
 = 1.1.0 =
 Introduced new PHP/JS hooks, improved wording, and fixed confirmation message visibility.

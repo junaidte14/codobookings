@@ -1,0 +1,17 @@
+.codobookingsuf-editor { max-width: 900px; }
+.codobookingsuf-fields-list { list-style: none; margin: 0; padding: 0; }
+.codobookingsuf-field-item { border: 1px solid #ddd; padding: 12px; margin-bottom: 8px; background: #fff; }
+.codobookingsuf-field-summary { display:flex; align-items:center; gap:12px; }
+.codobookingsuf-field-summary .dashicons { cursor: move; margin-right: 6px; }
+.codobookingsuf-field-preview { font-weight: 600; margin-right: 6px; }
+.codobookingsuf-field-type-label { color:#666; margin-left:6px; }
+.codobookingsuf-field-summary a { margin-left: 8px; text-decoration: none; }
+.codobookingsuf-field-settings { margin-top: 8px; display:block; }
+.codobookingsuf-field-settings.collapsed { display: none; }
+.codobookingsuf-field-settings.open { display: block; }
+.codobookingsuf-field-table td { vertical-align: top; padding-right: 12px; }
+.codobookingsuf-editor-actions { margin-top: 10px; }
+.codobookingsuf-required-star { color: #a00; }
+.codobookingsuf-editor .codobookingsuf-field-options { width: 100%; box-sizing: border-box; }
+.codobookingsuf-col-label { width: 48%; }
+.codobookingsuf-col-name { width: 48%; }

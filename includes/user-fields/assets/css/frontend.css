@@ -1,0 +1,44 @@
+.codobookingsuf-user-fields-wrapper {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.codobookingsuf-field {
+    margin-bottom: 15px;
+}
+
+.codobookingsuf-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.codobookingsuf-required-star {
+    color: #dc3232;
+}
+
+.codobookingsuf-field input[type="text"],
+.codobookingsuf-field input[type="number"],
+.codobookingsuf-field input[type="email"],
+.codobookingsuf-field textarea,
+.codobookingsuf-field select {
+    width: 96%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.codobookingsuf-field textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.codobookingsuf-field input[type="radio"],
+.codobookingsuf-field input[type="checkbox"] {
+    margin-right: 6px;
+}
